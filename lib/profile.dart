@@ -1,6 +1,13 @@
+import 'dart:convert';
 import 'dart:ui';
 
+import 'package:driver_app/commons.dart';
+import 'package:driver_app/login.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:developer' as developer;
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -10,8 +17,36 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+
+  String userProfileImage = "";
+
+  getUserData() async {
+
+    // requestHeaders['cookie'] = Commons.cookie;
+
+    String url = "${Commons.baseUrl}supervisor/profile/${Commons.login_id}";
+    var response = await http.get(Uri.parse(url));
+
+    SharedPreferences  sharedPreferences = await SharedPreferences.getInstance();
+    developer.log("jkljkl" + response.body.toString());
+
+    Map<String, dynamic> responseJson = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      var user = responseJson['driver'];
+      if (user['profile_image'] != null) {
+        setState(() {
+          userProfileImage = user['profile_image'];
+        });
+      }
+    } else {
+      Commons.showErrorMessage("Server Error!");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    getUserData();
     return Scaffold(
       body: SingleChildScrollView(
           child: Stack(
@@ -32,7 +67,7 @@ class _ProfileState extends State<Profile> {
                       alignment: Alignment.center,
                       margin: EdgeInsetsDirectional.only(top: MediaQuery.of(context).size.height/6),
                       child: CircleAvatar(
-                        backgroundImage: AssetImage('assets/avatar.png',),
+                        backgroundImage: NetworkImage(userProfileImage),
                         radius: 55,
                       ),
                     ),
@@ -92,7 +127,7 @@ class _ProfileState extends State<Profile> {
                               Container(
                                 padding: EdgeInsetsDirectional.only(start: MediaQuery.of(context).size.width * 0.05, top: MediaQuery.of(context).size.width * 0.01, bottom: MediaQuery.of(context).size.width * 0.01),
                                 child: Text(
-                                  "10.2",
+                                  "43.6",
                                   style: TextStyle(
                                       color: Colors.orange,
                                       fontSize: MediaQuery.of(context).size.height/60
@@ -122,7 +157,7 @@ class _ProfileState extends State<Profile> {
                               Container(
                                 padding: EdgeInsetsDirectional.only(start: MediaQuery.of(context).size.width * 0.05, top: MediaQuery.of(context).size.width * 0.01, bottom: MediaQuery.of(context).size.width * 0.01),
                                 child: Text(
-                                  "10.2",
+                                  "4",
                                   style: TextStyle(
                                       color: Colors.orange,
                                       fontSize: MediaQuery.of(context).size.height/60
@@ -213,7 +248,10 @@ class _ProfileState extends State<Profile> {
                                 ),
                                 padding: const EdgeInsets.all(0.0),
                               ),
-                              onPressed:  () {},
+                              onPressed:  () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => MyLogin(),));
+                                Commons.token = "";
+                              },
                               child: Container(
                                 width: MediaQuery.of(context).size.width/4,
                                 height: MediaQuery.of(context).size.height/25,
@@ -231,7 +269,9 @@ class _ProfileState extends State<Profile> {
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
                                 padding: const EdgeInsets.all(0.0),
                               ),
-                              onPressed:  () {},
+                              onPressed:  () {
+                                Navigator.pop(context);
+                              },
                               child: Ink(
                                 decoration: const BoxDecoration(
                                   gradient: LinearGradient(colors: [Colors.grey, Colors.white]),

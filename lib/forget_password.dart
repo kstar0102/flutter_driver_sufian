@@ -11,6 +11,8 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> {
+
+  final mobileController = new TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +86,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                   SizedBox(
                       height: MediaQuery.of(context).size.height/8
                   ),
-                  const InputField(inputType: "mobile"),
+                  InputField(inputType: "mobile", controller: mobileController),
                   SizedBox(
                       height: MediaQuery.of(context).size.height/8
                   ),

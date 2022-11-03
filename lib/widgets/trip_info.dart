@@ -134,4 +134,5 @@ class TripInfo {
   String getTripNoStr() {
     return 'Trip # $tripNo';
   }
+
 }

@@ -1,6 +1,12 @@
+import 'package:driver_app/commons.dart';
 import 'package:flutter/material.dart';
 
 import 'widgets/input_edit_field.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'dart:developer' as developer;
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({Key? key}) : super(key: key);
@@ -10,8 +16,72 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePasswordState extends State<ChangePassword> {
+
+  String userProfileImage = "";
+
+  final TextEditingController currentController = TextEditingController();
+  final TextEditingController newController = TextEditingController();
+  final TextEditingController confirmController = TextEditingController();
+
+  getUserData() async {
+    String url = "${Commons.baseUrl}supervisor/profile/${Commons.login_id}";
+    var response = await http.get(Uri.parse(url));
+    Map<String, dynamic> responseJson = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      var user = responseJson['driver'];
+      developer.log(user.toString());
+
+      if (user['profile_image'] != null) {
+        if (userProfileImage != "") return;
+        setState(() {
+          userProfileImage = user['profile_image'];
+        });
+      }
+    } else {
+      Commons.showErrorMessage("Server Error!");
+    }
+  }
+
+  changePassword() async {
+    if (currentController.text == "" || newController.text == "" || newController.text != confirmController.text) {
+      Commons.showErrorMessage("Input Invalid");
+      return;
+    }
+
+    Map data = {
+      'id': Commons.login_id,
+      'current_pwd': currentController.text,
+      'new_pwd': newController.text,
+    };
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json',
+      'Cookie' : Commons.cookie,
+      'X-CSRF-TOKEN' : Commons.token
+    };
+    String url = "${Commons.baseUrl}supervisor/pwd/change";
+    var response = await http.post(Uri.parse(url), headers: requestHeaders, body: data);
+
+    Map<String, dynamic> responseJson = jsonDecode(response.body);
+    developer.log(responseJson.toString());
+
+    if (response.statusCode == 200) {
+      if (responseJson['result'] == 'success') {
+        Commons.showSuccessMessage("Changed Successfully.");
+        Navigator.pushNamed(context, "/profile");
+      } else {
+        Commons.showErrorMessage(responseJson["result"].toString());
+      }
+    } else {
+      Commons.showErrorMessage("Server Error!");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    getUserData();
+
     return Scaffold(
       body: SingleChildScrollView(
           child: Stack(
@@ -32,7 +102,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       alignment: Alignment.center,
                       margin: EdgeInsetsDirectional.only(top: MediaQuery.of(context).size.height/6),
                       child: CircleAvatar(
-                        backgroundImage: AssetImage('assets/avatar.png',),
+                        backgroundImage: NetworkImage(userProfileImage),
                         radius: 55,
                       ),
                     ),
@@ -50,26 +120,26 @@ class _ChangePasswordState extends State<ChangePassword> {
                     Container(
                       alignment: Alignment.center,
                       margin: EdgeInsetsDirectional.only(start: MediaQuery.of(context).size.width/5, end: MediaQuery.of(context).size.width/5),
-                      child: EditInputField(displayName: "Current Password"),
+                      child: EditInputField(displayName: "Current Password", myController: currentController),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height/80,),
                     Container(
                       alignment: Alignment.center,
                       margin: EdgeInsetsDirectional.only(start: MediaQuery.of(context).size.width/5, end: MediaQuery.of(context).size.width/5),
-                      child: EditInputField(displayName: "New Password"),
+                      child: EditInputField(displayName: "New Password", myController: newController),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height/80,),
                     Container(
                       alignment: Alignment.center,
                       margin: EdgeInsetsDirectional.only(start: MediaQuery.of(context).size.width/5, end: MediaQuery.of(context).size.width/5),
-                      child: EditInputField(displayName: "Confirm Password"),
+                      child: EditInputField(displayName: "Confirm Password", myController: confirmController),
                     ),
 
                     SizedBox(height: MediaQuery.of(context).size.height/7,),
                     Container(
                         child: ElevatedButton(
                           onPressed: () {
-
+                              changePassword();
                           },
                           style: ElevatedButton.styleFrom(
                               fixedSize: Size(MediaQuery.of(context).size.width/1.7, 30),

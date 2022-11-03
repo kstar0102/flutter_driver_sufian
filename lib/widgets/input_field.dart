@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 class InputField extends StatefulWidget {
 
   final String inputType;
+  final TextEditingController controller;
 
-  const InputField({Key? key, required this.inputType}) : super(key: key);
+  const InputField({Key? key, required this.inputType, required this.controller}) : super(key: key);
 
   @override
   State<InputField> createState() => _InputFieldState();
@@ -52,6 +53,7 @@ class _InputFieldState extends State<InputField> {
         keyboardType: textInputType,
         obscureText: isObscure,
         cursorColor: Colors.white,
+        controller: widget.controller,
         decoration: InputDecoration(
           label: Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),

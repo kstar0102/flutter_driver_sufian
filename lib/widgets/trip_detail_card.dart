@@ -1,3 +1,4 @@
+import 'package:driver_app/commons.dart';
 import 'package:driver_app/trip_detail.dart';
 import 'package:flutter/material.dart';
 
@@ -7,12 +8,12 @@ import 'package:driver_app/widgets/trip_busline.dart';
 import 'package:driver_app/widgets/gradient_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class TripCard extends StatefulWidget {
+class TripDetailCard extends StatefulWidget {
   final TripInfo info;
   final dynamic trip;
   final VoidCallback onPressed;
 
-  const TripCard({
+  const TripDetailCard({
     Key? key,
     required this.info,
     required this.onPressed,
@@ -20,10 +21,10 @@ class TripCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<TripCard> createState() => _TripCardState();
+  State<TripDetailCard> createState() => _TripDetailCardState();
 }
 
-class _TripCardState extends State<TripCard> {
+class _TripDetailCardState extends State<TripDetailCard> {
   Widget _buildCompanyRow() {
     final screenW = MediaQuery.of(context).size.width;
     final avatarRadius = screenW * 0.0924 * 0.5;
@@ -201,18 +202,19 @@ class _TripCardState extends State<TripCard> {
             ),
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 2),
-          child: Text(
-            widget.info.getTripNoStr(),
-            style: TextStyle(
-              fontFamily: 'Montserrat',
-              fontWeight: FontWeight.w500,
-              fontSize: 15,
-              color: widget.info.getStatusColor(),
-            ),
-          ),
-        ),
+  // For Detail
+        // Padding(
+        //   padding: const EdgeInsets.only(top: 2),
+        //   child: Text(
+        //     widget.info.getTripNoStr(),
+        //     style: TextStyle(
+        //       fontFamily: 'Montserrat',
+        //       fontWeight: FontWeight.w500,
+        //       fontSize: 15,
+        //       color: widget.info.getStatusColor(),
+        //     ),
+        //   ),
+        // ),
         SizedBox(
           width: screenW * 0.741,
           child: Column(
@@ -221,7 +223,59 @@ class _TripCardState extends State<TripCard> {
               const SizedBox(height: 2),
               TripBusLine(info: widget.info.busLine),
               // _buildButtonsRow(),
-              SizedBox(height: 30,)
+              SizedBox(height: 10,),
+              Container(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Text(
+                    "DETAILS",
+                    style: TextStyle(
+                        color: Colors.deepOrangeAccent,
+                        fontSize: 12
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 5),
+                  child: Text(
+                    "${Commons.marea[int.parse(widget.trip['origin_area'])] ?? 'here'} - ${Commons.marea[int.parse(widget.trip['destination_area'])] ?? 'here'} ",
+                    style: TextStyle(
+                        color: Colors.black38,
+                        fontSize: 10
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Text(
+                    "DRIVER",
+                    style: TextStyle(
+                        color: Colors.deepOrangeAccent,
+                        fontSize: 12
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 5, bottom: 30),
+                  child: Text(
+                    widget.trip['dirver_name'] ?? "Driver Name",
+                    style: TextStyle(
+                        color: Colors.black38,
+                        fontSize: 10
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -257,9 +311,9 @@ class _TripCardState extends State<TripCard> {
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(
-            builder: (context) {
-                return TripDetail(trip: widget.trip,);
-            },
+          builder: (context) {
+            return TripDetail(trip: widget.trip,);
+          },
         ));
       },
       child: Container(

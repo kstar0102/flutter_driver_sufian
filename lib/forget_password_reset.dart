@@ -11,6 +11,10 @@ class ForgetPasswordReset extends StatefulWidget {
 }
 
 class _ForgetPasswordResetState extends State<ForgetPasswordReset> {
+
+  final newPassController = new TextEditingController();
+  final confirmPassController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,11 +75,11 @@ class _ForgetPasswordResetState extends State<ForgetPasswordReset> {
                   SizedBox(
                       height: MediaQuery.of(context).size.height/8
                   ),
-                  const InputField(inputType: "new_password"),
+                  InputField(inputType: "new_password", controller: newPassController),
                   SizedBox(
                       height: MediaQuery.of(context).size.height/25
                   ),
-                  const InputField(inputType: "confirm_password"),
+                  InputField(inputType: "confirm_password", controller: confirmPassController),
                   SizedBox(
                       height: MediaQuery.of(context).size.height/18
                   ),

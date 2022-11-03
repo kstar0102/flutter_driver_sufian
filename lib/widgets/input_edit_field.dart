@@ -1,16 +1,52 @@
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 
 class EditInputField extends StatefulWidget {
   final String displayName;
-  const EditInputField({Key? key, required this.displayName}) : super(key: key);
+  final TextEditingController myController;
+  const EditInputField({Key? key, required this.displayName, required this.myController}) : super(key: key);
   @override
   State<EditInputField> createState() => _EditInputFieldState();
 }
 
 class _EditInputFieldState extends State<EditInputField> {
+
+  // _selectDate(BuildContext context) async {
+  //   DateTime newSelectedDate = await showDatePicker(
+  //       context: context,
+  //       initialDate: _selectedDate != null ? _selectedDate : DateTime.now(),
+  //       firstDate: DateTime(2000),
+  //       lastDate: DateTime(2040),
+  //       builder: (BuildContext context, Widget child) {
+  //         return Theme(
+  //           data: ThemeData.dark().copyWith(
+  //             colorScheme: ColorScheme.dark(
+  //               primary: Colors.deepPurple,
+  //               onPrimary: Colors.white,
+  //               surface: Colors.blueGrey,
+  //               onSurface: Colors.yellow,
+  //             ),
+  //             dialogBackgroundColor: Colors.blue[500],
+  //           ),
+  //           child: child,
+  //         );
+  //       });
+  //
+  //   if (newSelectedDate != null) {
+  //     _selectedDate = newSelectedDate;
+  //     _textEditingController
+  //       ..text = DateFormat.yMMMd().format(_selectedDate)
+  //       ..selection = TextSelection.fromPosition(TextPosition(
+  //           offset: _textEditingController.text.length,
+  //           affinity: TextAffinity.upstream));
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
+    bool isSecure = false;
     bool isPhone = false;
     if (widget.displayName == "Phone") {
       isPhone = true;
@@ -23,6 +59,10 @@ class _EditInputFieldState extends State<EditInputField> {
     if (widget.displayName == "Current Password" || widget.displayName == "Confirm Password" ) {
       isBirth = true;
       isPassword = true;
+      isSecure = true;
+    }
+    if (widget.displayName == "New Password") {
+      isSecure = true;
     }
     SizedBox general = SizedBox(
       child: Column(
@@ -73,8 +113,10 @@ class _EditInputFieldState extends State<EditInputField> {
               SizedBox(
                 width: (MediaQuery.of(context).size.width-30)/1.7,
                 height: 35,
-                child: const TextField(
-                  decoration: InputDecoration(
+                child: TextField(
+                  obscureText: isSecure,
+                  controller: widget.myController,
+                  decoration: const InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(50), topRight: Radius.circular(50),
@@ -95,6 +137,7 @@ class _EditInputFieldState extends State<EditInputField> {
                       ),
                       contentPadding: EdgeInsets.all(10)
                   ),
+                  // onTap: ,
                 ),
               )
             ],
@@ -146,8 +189,9 @@ class _EditInputFieldState extends State<EditInputField> {
               SizedBox(
                 width: (MediaQuery.of(context).size.width-100)/1.7,
                 height: 35,
-                child: const TextField(
-                  decoration: InputDecoration(
+                child: TextField(
+                  controller: widget.myController,
+                  decoration: const InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(50), topRight: Radius.circular(50),

@@ -17,7 +17,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class MyLogin extends StatelessWidget {
-  const MyLogin({Key? key}) : super(key: key);
+
+  MyLogin({super.key});
+
+  final nameController = TextEditingController();
+  final passController = TextEditingController();
 
   setToken() async {
     developer.log("init");
@@ -52,11 +56,15 @@ class MyLogin extends StatelessWidget {
 
   }
 
-  login(BuildContext context) async {
+  login(BuildContext context, TextEditingController nameCon, TextEditingController passCon) async {
     // setToken();
+    if (nameCon.text == "" && passCon.text == "") {
+      Commons.showErrorMessage("Input Name and Password!");
+      return;
+    }
     Map data = {
-      'email': "Sami Ahmad",
-      'password': "111111"
+      'email': nameCon.text,
+      'password': passCon.text,
     };
     Map<String, String> requestHeaders = {
       'Content-type': 'application/x-www-form-urlencoded',
@@ -68,7 +76,7 @@ class MyLogin extends StatelessWidget {
 
     // requestHeaders['cookie'] = Commons.cookie;
 
-    String url = "${Commons.baseUrl}login";
+    String url = "${Commons.baseUrl}supervisor/login";
     var response = await http.post(Uri.parse(url), body: data, headers: requestHeaders);
 
     SharedPreferences  sharedPreferences = await SharedPreferences.getInstance();
@@ -77,14 +85,18 @@ class MyLogin extends StatelessWidget {
     developer.log("msg6" + responseJson.toString());
     if (response.statusCode == 200) {
       developer.log("msg7" + "success http request");
-      Commons.login_id = responseJson['id'].toString();
-      Commons.isLogin = true;
+      if (responseJson['result'] == "Invalid SuperVisor") {
+        Commons.showErrorMessage('Invalid User');
+      } else {
+        Commons.login_id = responseJson['id'].toString();
+        Commons.isLogin = true;
 
-      // Navigator.pushNamed(context, "/main");
-      // setState( () {
-      //   sharedPreferences.setString("token", Commons.token);
-      //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => SubMain()), (route) => false);
-      // })
+        Navigator.pushNamed(context, "/main");
+        // setState( () {
+        sharedPreferences.setString("token", Commons.token);
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => SubMain()), (route) => false);
+        // })
+      }
     } else {
       Fluttertoast.showToast(
           msg: "Login Failed",
@@ -104,6 +116,8 @@ class MyLogin extends StatelessWidget {
     //   Navigator.pushNamed(context, "/main");
     // }
     setToken();
+
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -138,24 +152,24 @@ class MyLogin extends StatelessWidget {
                   SizedBox(
                       height: MediaQuery.of(context).size.height/8
                   ),
-                  const InputField(inputType: "username"),
+                  InputField(inputType: "username", controller: nameController),
                   SizedBox(
                       height: MediaQuery.of(context).size.height/20
                   ),
-                  const InputField(inputType: "password"),
+                  InputField(inputType: "password", controller: passController),
                   SizedBox(
                       height: MediaQuery.of(context).size.height/13
                   ),
                   ButtonField(buttonType: "login", onPressedCallback: () {
-                    login(context);
+                    login(context, nameController, passController);
                   }),
                   SizedBox(
                       height: MediaQuery.of(context).size.height/7
                   ),
                   GestureDetector(
                     onTap: () {
-                      setToken();
-                      // Navigator.pushNamed(context, "/forget_password");
+                      // setToken();
+                      Navigator.pushNamed(context, "/forget_password");
                     },
                     child: Text(
                       "FORGET PASSWORD",

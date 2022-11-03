@@ -70,10 +70,10 @@ class _HomeTripsPageState extends State<HomeTripsPage>
               controller: _tabController,
               children: const [
                 // TODAY TRIPS view
-                TripsListView(listType: TripsListType.todayTrips),
+                TripsListView(listType: TripsListType.todayTrips, today: true),
 
                 // PAST TRIPS view
-                TripsListView(listType: TripsListType.pastTrips),
+                TripsListView(listType: TripsListType.pastTrips, today: false),
               ],
             ),
           ),

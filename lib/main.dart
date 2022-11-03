@@ -12,6 +12,7 @@ import 'package:driver_app/profile_edit.dart';
 import 'package:driver_app/sub_main.dart';
 import 'package:driver_app/sub_main2.dart';
 import 'package:driver_app/trip.dart';
+import 'package:driver_app/trip_detail.dart';
 import 'package:flutter/material.dart';
 
 import 'home_trips.dart';
@@ -42,7 +43,6 @@ class MyApp extends StatelessWidget {
         '/password_change': (context) => const ChangePassword(),
         '/notification': (context) => const NotificationPage(),
         '/trip': (context) => const HomeTripsPage(),
-
       },
     );
   }
@@ -64,7 +64,7 @@ class SplashScreenState extends State<MyHomePage> {
     Timer(const Duration(seconds: 2),
             ()=>Navigator.pushReplacement(context,
             MaterialPageRoute(builder:
-                (context) => const MyLogin()
+                (context) => MyLogin()
             )
         )
     );
