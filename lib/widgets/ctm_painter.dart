@@ -7,11 +7,12 @@ class BackArrowPainter extends CustomPainter {
     var path = Path();
 
     paint.color = Colors.white;
-    paint.style = PaintingStyle.fill;
+    paint.style = PaintingStyle.stroke;
+    paint.strokeWidth = 3;
 
-    path.moveTo(0, 0);
+    path.moveTo(size.width, 0);
+    path.lineTo(0, size.height*0.5);
     path.lineTo(size.width, size.height);
-    path.lineTo(0, size.height);
 
     canvas.drawPath(path, paint);
   }

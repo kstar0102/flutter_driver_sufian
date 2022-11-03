@@ -175,29 +175,39 @@ class _EditProfileState extends State<EditProfile> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      // decoration: BoxDecoration(
-                      //   border: Border.all(
-                      //     color: Colors.red,
-                      //     width: 3
-                      //   )
-                      // ),
-                      child: SizedBox.square(
-                        dimension: 30,
-                        child: CustomPaint(
-                          painter: BackArrowPainter(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                width: 25,
+                                height: 25,
+                                margin: EdgeInsets.only(top: 45, left: 30),
+                                child: CustomPaint(
+                                  painter: BackArrowPainter(),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                      )
-                    ),
-                    Container(
-                      margin: EdgeInsetsDirectional.only(top: MediaQuery.of(context).size.height/25),
-                      child: const Text(
-                        "EDIT PROFILE",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w900
+                        Container(
+                          margin: EdgeInsetsDirectional.only(top: MediaQuery.of(context).size.height/25),
+                          child: const Text(
+                            "EDIT PROFILE",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w900
+                            ),
+                          ),
                         ),
-                      ),
+                        SizedBox(width: MediaQuery.of(context).size.width/8,)
+                      ],
                     ),
                     GestureDetector(
                       onTap: () {
@@ -206,7 +216,7 @@ class _EditProfileState extends State<EditProfile> {
                       child: _image == null ?
                       Container(
                           alignment: Alignment.center,
-                          margin: EdgeInsetsDirectional.only(top: MediaQuery.of(context).size.height/9),
+                          margin: EdgeInsetsDirectional.only(top: MediaQuery.of(context).size.height/10),
                           child: CircleAvatar(
                             backgroundImage: NetworkImage(userProfileImage),
                             radius: 55,
@@ -214,7 +224,7 @@ class _EditProfileState extends State<EditProfile> {
                       ) :
                       Container(
                           alignment: Alignment.center,
-                          margin: EdgeInsetsDirectional.only(top: MediaQuery.of(context).size.height/9),
+                          margin: EdgeInsetsDirectional.only(top: MediaQuery.of(context).size.height/10),
                           child: CircleAvatar(
                             // backgroundImage: FileImage(File(uploadimage!.path)),
                             backgroundImage: FileImage(File(_image!.path)),

@@ -1,4 +1,5 @@
 import 'package:driver_app/commons.dart';
+import 'package:driver_app/widgets/ctm_painter.dart';
 import 'package:flutter/material.dart';
 
 import 'widgets/input_edit_field.dart';
@@ -98,9 +99,27 @@ class _ChangePasswordState extends State<ChangePassword> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            width: 25,
+                            height: 25,
+                            margin: EdgeInsets.only(top: 45, left: 30),
+                            child: CustomPaint(
+                              painter: BackArrowPainter(),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                     Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsetsDirectional.only(top: MediaQuery.of(context).size.height/6),
+                      margin: EdgeInsetsDirectional.only(top: MediaQuery.of(context).size.height/12),
                       child: CircleAvatar(
                         backgroundImage: NetworkImage(userProfileImage),
                         radius: 55,
