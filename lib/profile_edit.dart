@@ -186,8 +186,8 @@ class _EditProfileState extends State<EditProfile> {
                                 Navigator.pop(context);
                               },
                               child: Container(
-                                width: 25,
-                                height: 25,
+                                width: 20,
+                                height: 40,
                                 margin: EdgeInsets.only(top: 45, left: 30),
                                 child: CustomPaint(
                                   painter: BackArrowPainter(),
@@ -202,7 +202,8 @@ class _EditProfileState extends State<EditProfile> {
                             "EDIT PROFILE",
                             style: TextStyle(
                                 color: Colors.white,
-                                fontWeight: FontWeight.w900
+                                fontWeight: FontWeight.w900,
+                                fontSize: 17
                             ),
                           ),
                         ),
@@ -216,7 +217,7 @@ class _EditProfileState extends State<EditProfile> {
                       child: _image == null ?
                       Container(
                           alignment: Alignment.center,
-                          margin: EdgeInsetsDirectional.only(top: MediaQuery.of(context).size.height/10),
+                          margin: EdgeInsetsDirectional.only(top: MediaQuery.of(context).size.height/15),
                           child: CircleAvatar(
                             backgroundImage: NetworkImage(userProfileImage),
                             radius: 55,
@@ -224,7 +225,7 @@ class _EditProfileState extends State<EditProfile> {
                       ) :
                       Container(
                           alignment: Alignment.center,
-                          margin: EdgeInsetsDirectional.only(top: MediaQuery.of(context).size.height/10),
+                          margin: EdgeInsetsDirectional.only(top: MediaQuery.of(context).size.height/15),
                           child: CircleAvatar(
                             // backgroundImage: FileImage(File(uploadimage!.path)),
                             backgroundImage: FileImage(File(_image!.path)),

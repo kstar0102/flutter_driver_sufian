@@ -32,127 +32,136 @@ class _HomeTripsPageState extends State<HomeTripsPage>
     final primaryTabBarHMargin = 150 * SizeConfig.scaleX;
 
     return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            height: 130 * SizeConfig.scaleY,
-            margin: EdgeInsets.only(
-              left: primaryTabBarHMargin,
-              right: primaryTabBarHMargin,
-              top: 50 * SizeConfig.scaleY,
-            ),
-            decoration: BoxDecoration(
-              color: const Color(0xFFB3B3B3),
-              borderRadius: BorderRadius.circular(100),
-            ),
-            child: TabBar(
-              controller: _tabController,
-              indicator: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(100)),
-                color: kColorPrimaryBlue,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/bg_notification.png"),
+            fit: BoxFit.fill
+          )
+        ),
+        child: Column(
+          children: [
+            SizedBox(height: 80,),
+            Container(
+              height: 130 * SizeConfig.scaleY,
+              margin: EdgeInsets.only(
+                left: primaryTabBarHMargin,
+                right: primaryTabBarHMargin,
+                top: 50 * SizeConfig.scaleY,
               ),
-              labelColor: Colors.white,
-              unselectedLabelColor: Colors.white,
-              labelStyle: TextStyle(
-                fontFamily: 'Montserrat',
-                fontWeight: FontWeight.w700,
-                fontSize: 32 * SizeConfig.scaleY,
+              decoration: BoxDecoration(
+                color: const Color(0xFFB3B3B3),
+                borderRadius: BorderRadius.circular(100),
               ),
-              tabs: const [
-                Tab(text: 'TODAY TRIPS'),
-                Tab(text: 'PAST TRIPS'),
-              ],
+              child: TabBar(
+                controller: _tabController,
+                indicator: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                  color: kColorPrimaryBlue,
+                ),
+                labelColor: Colors.white,
+                unselectedLabelColor: Colors.white,
+                labelStyle: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 32 * SizeConfig.scaleY,
+                ),
+                tabs: const [
+                  Tab(text: 'TODAY TRIPS'),
+                  Tab(text: 'PAST TRIPS'),
+                ],
+              ),
             ),
-          ),
-          // tab bar view here
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: const [
-                // TODAY TRIPS view
-                TripsListView(listType: TripsListType.todayTrips, today: true),
+            // tab bar view here
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: const [
+                  // TODAY TRIPS view
+                  TripsListView(listType: TripsListType.todayTrips, today: true),
 
-                // PAST TRIPS view
-                TripsListView(listType: TripsListType.pastTrips, today: false),
-              ],
-            ),
-          ),
-          Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height/30),
-              width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.height / 13,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(50)),
-                color: Colors.orange,
+                  // PAST TRIPS view
+                  TripsListView(listType: TripsListType.pastTrips, today: false),
+                ],
               ),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/main');
-                    },
-                    child: Container(
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.only(start: MediaQuery.of(context).size.width * 0.08, top: 20, bottom: 15),
-                          child: Image.asset("assets/navbar_track2.png"),
-                        )
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.3,
-                    height: MediaQuery.of(context).size.height / 20,
-                    margin: EdgeInsets.only(left: 20, top: 10, bottom: 10,),
-                    child: TextField(
-                      style: const TextStyle(
-                          fontSize: 13
-                      ),
-                      decoration: InputDecoration(
-                          enabled: false,
-                          prefixIcon: Padding(
-                            padding: EdgeInsetsDirectional.only(start: 10,top: 10, bottom: 10),
-                            // padding: EdgeInsetsDirectional.symmetric(vertical: 10, horizontal: 10),
-                            child: Image.asset("assets/navbar_trip.png", color: Colors.red,),
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                          contentPadding: EdgeInsets.all(1),
-                          hintText: "TRIPS",
-                          hintStyle: const TextStyle(
-                              color: Colors.red
-                          ),
-                          border: const OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(50))
+            ),
+            Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height/30),
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: MediaQuery.of(context).size.height / 13,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(50)),
+                  color: Colors.orange,
+                ),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/main');
+                      },
+                      child: Container(
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.only(start: MediaQuery.of(context).size.width * 0.08, top: 20, bottom: 15),
+                            child: Image.asset("assets/navbar_track2.png"),
                           )
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/notification');
-                    },
-                    child: Container(
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.only(start: MediaQuery.of(context).size.width * 0.08, top: 20, bottom: 15),
-                          child: Image.asset("assets/navbar_notification.png"),
-                        )
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      height: MediaQuery.of(context).size.height / 20,
+                      margin: EdgeInsets.only(left: 20, top: 10, bottom: 10,),
+                      child: TextField(
+                        style: const TextStyle(
+                            fontSize: 13
+                        ),
+                        decoration: InputDecoration(
+                            enabled: false,
+                            prefixIcon: Padding(
+                              padding: EdgeInsetsDirectional.only(start: 10,top: 10, bottom: 10),
+                              // padding: EdgeInsetsDirectional.symmetric(vertical: 10, horizontal: 10),
+                              child: Image.asset("assets/navbar_trip.png", color: Colors.red,),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                            contentPadding: EdgeInsets.all(1),
+                            hintText: "TRIPS",
+                            hintStyle: const TextStyle(
+                                color: Colors.red
+                            ),
+                            border: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(50))
+                            )
+                        ),
+                      ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/profile');
-                    },
-                    child: Container(
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.only(start: MediaQuery.of(context).size.width * 0.1, top: 20, bottom: 15),
-                          child: Image.asset("assets/navbar_user.png"),
-                        )
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/notification');
+                      },
+                      child: Container(
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.only(start: MediaQuery.of(context).size.width * 0.08, top: 20, bottom: 15),
+                            child: Image.asset("assets/navbar_notification.png"),
+                          )
+                      ),
                     ),
-                  ),
-                ],
-              )
-          ),
-        ],
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/profile');
+                      },
+                      child: Container(
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.only(start: MediaQuery.of(context).size.width * 0.1, top: 20, bottom: 15),
+                            child: Image.asset("assets/navbar_user.png"),
+                          )
+                      ),
+                    ),
+                  ],
+                )
+            ),
+          ],
+        ),
       ),
     );
   }

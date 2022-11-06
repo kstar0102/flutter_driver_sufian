@@ -43,6 +43,10 @@ dependencies:
   shared_preferences: ^2.0.15
   image_picker: ^0.8.6
   scrollable_list_tabview: ^0.1.6
+  flutter_polyline_points: ^1.0.0
+  flutter_svg: ^1.1.6
+  location: ^4.4.0
+  pointer_interceptor: ^0.9.3+3
 
 dev_dependencies:
   flutter_test:
@@ -70,7 +74,7 @@ flutter:
 
   assets:
     - assets/
-
+    - assets/images/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

@@ -91,7 +91,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 width: double.infinity,
                 decoration: const BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage("assets/bg_profile.png"), alignment: Alignment.topCenter)
+                        image: AssetImage("assets/bg_editpro.png"), alignment: Alignment.topCenter)
                 ),
                 height: MediaQuery.of(context).size.height,
               ),
@@ -100,42 +100,40 @@ class _ChangePasswordState extends State<ChangePassword> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         GestureDetector(
                           onTap: () {
                             Navigator.pop(context);
                           },
                           child: Container(
-                            width: 25,
-                            height: 25,
+                            width: 20,
+                            height: 40,
                             margin: EdgeInsets.only(top: 45, left: 30),
                             child: CustomPaint(
                               painter: BackArrowPainter(),
                             ),
                           ),
-                        )
+                        ),
+                        Container(
+                          margin: EdgeInsetsDirectional.only(top: MediaQuery.of(context).size.height/25),
+                          child: Text(
+                            "CHANGE PASSWORD",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 17
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width/8,
+                        ),
                       ],
                     ),
-                    Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsetsDirectional.only(top: MediaQuery.of(context).size.height/12),
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(userProfileImage),
-                        radius: 55,
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsetsDirectional.only(top: 10),
-                      child: Text(
-                        "Sufian Abu Alabban",
-                        style: TextStyle(
-                            color: Colors.orange,
-                            fontSize: MediaQuery.of(context).size.height/55
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height/12,),
+                    SizedBox(height: 20,),
+                    Image.asset("assets/bus_pass.png",scale: 3, alignment: Alignment.center),
+                    SizedBox(height: MediaQuery.of(context).size.height/4.3,),
                     Container(
                       alignment: Alignment.center,
                       margin: EdgeInsetsDirectional.only(start: MediaQuery.of(context).size.width/5, end: MediaQuery.of(context).size.width/5),
@@ -154,7 +152,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       child: EditInputField(displayName: "Confirm Password", myController: confirmController),
                     ),
 
-                    SizedBox(height: MediaQuery.of(context).size.height/7,),
+                    SizedBox(height: MediaQuery.of(context).size.height/9,),
                     Container(
                         child: ElevatedButton(
                           onPressed: () {

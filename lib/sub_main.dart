@@ -1,7 +1,9 @@
 import 'dart:async';
-
+import 'package:driver_app/commons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'widgets/button_field.dart';
 import 'widgets/input_field.dart';
 
@@ -14,41 +16,125 @@ class SubMain extends StatefulWidget {
 
 class _SubMainState extends State<SubMain> {
 
-  Completer<GoogleMapController> _controller = Completer();
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
+  final Completer<GoogleMapController> _controller = Completer();
+  static const LatLng sourceLocation = LatLng(37.335, -122.032);
+  static const LatLng destLocation = LatLng(37.335, -122.070);
+  
+  List<LatLng> polylineCoordinates = [];
+  LocationData? currentLocation;
 
-  static const CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
+  void getCurrentLocation() {
+    Location location = Location();
+    location.getLocation().then(
+            (value) => currentLocation = value,
+    );
+  }
+
+  void getPolyPoints() async {
+    PolylinePoints polylinePoints = PolylinePoints();
+
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+        Commons.APIKEY,
+        PointLatLng(sourceLocation.latitude, sourceLocation.longitude),
+        PointLatLng(destLocation.latitude, destLocation.longitude)
+    );
+    print(result);
+
+    if (result.points.isNotEmpty) {
+      result.points.forEach((PointLatLng point) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      });
+
+    }
+  }
+
+  @override
+  void initState() {
+    getCurrentLocation();
+    getPolyPoints();
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            // GoogleMap(
-            //   mapType: MapType.normal,
-            //   initialCameraPosition: _kGooglePlex,
-            //   onMapCreated: (GoogleMapController controller) {
-            //     _controller.complete(controller);
-            //   },
-            // ),
-            Container(
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                  // image: DecorationImage(
-                  //     image: AssetImage("assets/bg.png"), fit: BoxFit.cover)
-                color: Colors.blue
+      body: Stack(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: GoogleMap(
+              mapType: MapType.terrain,
+              initialCameraPosition: CameraPosition(
+                target: sourceLocation,
+                zoom: 13
               ),
-              height: MediaQuery.of(context).size.height,
+              markers: {
+                const Marker(
+                    markerId: MarkerId("source"),
+                    position: sourceLocation
+                ),
+                const Marker(
+                    markerId: MarkerId("destination"),
+                    position: destLocation
+                ),
+                // const Marker(
+                //     markerId: MarkerId("current"),
+                //     position: LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+                // )
+              },
+              polylines: {
+                Polyline(
+                  polylineId: PolylineId('route'),
+                  points: polylineCoordinates,
+                  color: Colors.purple,
+                  width: 6
+                )
+              },
+              onMapCreated: (GoogleMapController controller) {
+                _controller.complete(controller);
+              },
             ),
-            Container(
+          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(14.0),
+          //   child: Align(
+          //     alignment: Alignment.topCenter,
+          //     child: Container(
+          //       alignment: Alignment.center,
+          //       margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/22),
+          //       child: SizedBox(
+          //         width: MediaQuery.of(context).size.width * 0.9,
+          //         height: MediaQuery.of(context).size.height / 18,
+          //         child: const TextField(
+          //           decoration: InputDecoration(
+          //             hintText: "Search Driver, Trip, Bus No.",
+          //             hintStyle: TextStyle(
+          //                 color: Colors.black26
+          //             ),
+          //             filled: true,
+          //             fillColor: Colors.white,
+          //             contentPadding: EdgeInsets.only(left: 30),
+          //             border: OutlineInputBorder(
+          //               borderRadius: BorderRadius.all(Radius.circular(50)),
+          //               borderSide: BorderSide(
+          //                 color: Colors.red,
+          //               ),
+          //             ),
+          //             suffixIcon: Icon(
+          //               Icons.search,
+          //               color: Colors.black45,
+          //             ),
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
+
+          Container(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -81,7 +167,7 @@ class _SubMainState extends State<SubMain> {
                       ),
                     ),
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.8,),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.78,),
                   Container(
                       alignment: Alignment.bottomCenter,
                       margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height/30),
@@ -160,14 +246,10 @@ class _SubMainState extends State<SubMain> {
                 ],
               ),
             ),
-          ],
-        )
-      ),
+        ],
+      )
     );
   }
 
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-  }
+
 }
