@@ -18,7 +18,12 @@ class NotificationPage extends StatefulWidget {
 class _NotificationPageState extends State<NotificationPage> {
 
   List<dynamic>? notifications;
-  late String today = "01-01-2022";
+  late String todayDate = "01-01-2022";
+
+  void setTodayDate() {
+    DateTime now = DateTime.now();
+    todayDate = now.month.toString() + "-" + now.day.toString() + "-" + now.year.toString();
+  }
 
   getNotification(bool today) async {
     // setToken();
@@ -63,7 +68,7 @@ class _NotificationPageState extends State<NotificationPage> {
           width: MediaQuery.of(context).size.width/4,
         ),
         SizedBox(width: 20,),
-        Text("Today, ${today}"),
+        Text("Today, ${todayDate}"),
         SizedBox(width: 20,),
         Container(
           color: Colors.black,
@@ -129,6 +134,11 @@ class _NotificationPageState extends State<NotificationPage> {
     return Column(children: list,);
   }
 
+  @override
+  void initState() {
+    setTodayDate();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     getNotification(true);

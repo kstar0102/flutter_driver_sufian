@@ -140,8 +140,8 @@ class _TripsListViewState extends State<TripsListView> {
             Commons.getDay(trip['end_date']), Commons.getHour(trip['end_time']), Commons.getMinute(trip['end_time'])),
         // courseName: "${trip['origin_area']} - ${trip['destination_area']}",
         // cityName: trip['origin_city'],
-        courseName: "${Commons.marea[int.parse(trip['origin_area'])] ?? 'here'} ",
-        cityName: Commons.mcity[int.parse(trip['origin_city'])] ?? "here",
+        courseName: "${trip['origin_area'] ?? 'here'} ",
+        cityName: trip['origin_city'] ?? "here",
       ),
     );
   }
@@ -186,6 +186,12 @@ class _TripsListViewState extends State<TripsListView> {
         list.add(TripCard(
             trip: trip,
             info: getInfoModel(TripStatus.finished, trip),
+            onPressed: () {}
+        ));
+      } else if (trip['status'] == "9") { //fake
+        list.add(TripCard(
+            trip: trip,
+            info: getInfoModel(TripStatus.fake, trip),
             onPressed: () {}
         ));
       }
@@ -265,6 +271,15 @@ class _TripsListViewState extends State<TripsListView> {
           list.add(TripCard(
               trip: trip,
               info: getInfoModel(TripStatus.finished, trip),
+              onPressed: () {}
+          ));
+        }
+        list.add(const SizedBox(height: 20),);
+      } else if (type == "fake") {
+        if (trip['status'] == "9") { //fake
+          list.add(TripCard(
+              trip: trip,
+              info: getInfoModel(TripStatus.fake, trip),
               onPressed: () {}
           ));
         }
@@ -349,10 +364,10 @@ class _TripsListViewState extends State<TripsListView> {
 
     SizeConfig().init(context);
 
-    List<int> tabIDArray = [100, 0, 1, 2, 3, 4, 5];
-    var tabCount = 7;
+    List<int> tabIDArray = [100, 0, 1, 2, 3, 4, 5, 6];
+    var tabCount = 8;
     if (widget.listType == TripsListType.pastTrips) {
-      tabIDArray = [100, 2, 4, 5];
+      tabIDArray = [100, 4, 5, 6];
       tabCount = 4;
     }
 
@@ -596,10 +611,11 @@ class _TripsListViewState extends State<TripsListView> {
                   ]),
                 ),
                 if (widget.today) getTab("accept"),
-                getTab("reject"),
-                if (widget.today) getTab("start"),
+                if (widget.today) getTab("reject"),
                 getTab("finish"),
                 getTab("cancel"),
+                if (widget.today) getTab("start"),
+                getTab("fake"),
               ],
             ),
           ),

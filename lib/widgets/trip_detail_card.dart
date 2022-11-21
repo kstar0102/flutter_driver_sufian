@@ -242,7 +242,7 @@ class _TripDetailCardState extends State<TripDetailCard> {
                 child: Padding(
                   padding: EdgeInsets.only(top: 5),
                   child: Text(
-                    "${Commons.marea[int.parse(widget.trip['origin_area'])] ?? 'here'} - ${Commons.marea[int.parse(widget.trip['destination_area'])] ?? 'here'} ",
+                    "${widget.trip['origin_area'] ?? 'here'} - ${widget.trip['destination_area']?? 'here'} ",
                     style: TextStyle(
                         color: Colors.black38,
                         fontSize: 10
@@ -310,11 +310,14 @@ class _TripDetailCardState extends State<TripDetailCard> {
     // );
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) {
-            return TripDetail(trip: widget.trip,);
-          },
-        ));
+        // Navigator.push(context, MaterialPageRoute(
+        //   builder: (context) {
+        //     return TripDetail(trip: widget.trip,);
+        //   },
+        // ));
+        if (widget.info.getStatusStr() == "Pending") {
+          Navigator.pushNamed(context, '/trip_detail_pending');
+        }
       },
       child: Container(
         width: cardW,

@@ -87,7 +87,10 @@ class MyLogin extends StatelessWidget {
       developer.log("msg7" + "success http request");
       if (responseJson['result'] == "Invalid SuperVisor") {
         Commons.showErrorMessage('Invalid User');
-      } else {
+      } else if (responseJson['result'] == "Invalid Password") {
+        Commons.showErrorMessage('Invalid Password');
+      }
+      else {
         Commons.login_id = responseJson['id'].toString();
         Commons.isLogin = true;
 

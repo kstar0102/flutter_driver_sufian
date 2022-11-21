@@ -1,8 +1,13 @@
 import 'package:driver_app/commons.dart';
+import 'package:driver_app/trip_track.dart';
 import 'package:driver_app/widgets/trip_card.dart';
 import 'package:driver_app/widgets/trip_detail_card.dart';
+import 'package:driver_app/widgets/trip_detail_track.dart';
 import 'package:driver_app/widgets/trip_info.dart';
 import 'package:flutter/material.dart';
+
+import 'widgets/constants.dart';
+import 'widgets/ctm_painter.dart';
 
 class TripDetail extends StatefulWidget {
 
@@ -14,7 +19,23 @@ class TripDetail extends StatefulWidget {
   State<TripDetail> createState() => _TripDetailState();
 }
 
-class _TripDetailState extends State<TripDetail> {
+class _TripDetailState extends State<TripDetail> with SingleTickerProviderStateMixin {
+
+
+  late TabController _tabController;
+  @override
+  void initState() {
+    // TODO: implement initState
+    _tabController = TabController(length: 2, vsync: this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _tabController.dispose();
+    super.dispose();
+  }
 
   TripInfo getInfoModel(TripStatus type) {
     return TripInfo(
@@ -33,8 +54,8 @@ class _TripDetailState extends State<TripDetail> {
             Commons.getDay(widget.trip['end_date']), Commons.getHour(widget.trip['end_time']), Commons.getMinute(widget.trip['end_time'])),
         // courseName: "${widget.trip['origin_area']} - ${widget.trip['destination_area']}",
         // cityName: widget.trip['origin_city'],
-        courseName: "${Commons.marea[int.parse(widget.trip['origin_area'])] ?? 'here'} ",
-        cityName: Commons.mcity[int.parse(widget.trip['origin_city'])] ?? "here",
+        courseName: "${widget.trip['origin_area']?? 'here'} ",
+        cityName: widget.trip['origin_city']?? "here",
         // courseName: "code here",
         // cityName: "code here",
       ),
@@ -43,6 +64,10 @@ class _TripDetailState extends State<TripDetail> {
 
   @override
   Widget build(BuildContext context) {
+
+    SizeConfig().init(context);
+    final primaryTabBarHMargin = 150 * SizeConfig.scaleX;
+
 
     TripStatus tripStatus = TripStatus.pending;
     if (widget.trip['status'] == "1") {
@@ -57,43 +82,114 @@ class _TripDetailState extends State<TripDetail> {
       tripStatus = TripStatus.started;
     }else if (widget.trip['status'] == "6") { //finish
       tripStatus = TripStatus.finished;
+    }else if (widget.trip['status'] == "9") { //finish
+      tripStatus = TripStatus.fake;
     }
 
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("assets/bg_trip.png",),
-          fit: BoxFit.cover,
-          alignment: Alignment.topCenter
-        )
-      ),
-      child: Container(
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/bg_trip.png"),
+                fit: BoxFit.fill
+            )
+        ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: EdgeInsets.only(top: 25),
-                child: Text(
-                  "TRIP #${widget.trip['id']}",
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.white,
-                    decoration: TextDecoration.none
+            // SizedBox(height: MediaQuery.of(context).size.height/10,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    width: 20,
+                    height: 40,
+                    margin: EdgeInsets.only(top: 35, left: 30),
+                    child: CustomPaint(
+                      painter: BackArrowPainter(),
+                    ),
                   ),
                 ),
+                SizedBox(width: MediaQuery.of(context).size.width/5,),
+                Padding(
+                  padding: EdgeInsets.only(top: 30),
+                  child: Text(
+                    "TRIP #${widget.trip['id']}",
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                        decoration: TextDecoration.none
+                    ),
+                  ),
+                ),
+                SizedBox(width: MediaQuery.of(context).size.width/3,),
+              ],
             ),
+
             Container(
-              child: Image.asset("assets/bus_tripdetail.png", scale: 3,),
+              height: 130 * SizeConfig.scaleY,
+              margin: EdgeInsets.only(
+                left: primaryTabBarHMargin,
+                right: primaryTabBarHMargin,
+                top: 50 * SizeConfig.scaleY,
+              ),
+              decoration: BoxDecoration(
+                color: const Color(0xFFB3B3B3),
+                borderRadius: BorderRadius.circular(100),
+              ),
+              child: TabBar(
+                controller: _tabController,
+                indicator: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                    color: kColorPrimaryBlue
+                ),
+                labelColor: Colors.white,
+                unselectedLabelColor: Colors.white,
+                labelStyle: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 32 * SizeConfig.scaleY,
+                ),
+                tabs: const [
+                  Tab(text: "Details",),
+                  Tab(text: "Tracking",)
+                ],
+              ),
             ),
-            TripDetailCard(
-                info: getInfoModel(tripStatus),
-                onPressed: () {},
-                trip: widget.trip,
-            ),
-            SizedBox(height: 100,)
+            Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    Container(
+
+                      child: Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 100,),
+
+                            TripDetailCard(
+                              info: getInfoModel(tripStatus),
+                              onPressed: () {
+
+                              },
+                              trip: widget.trip,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    TripDetailTrack()
+
+                  ],
+                )
+            )
           ],
         ),
-      ),
+      )
     );
   }
 }

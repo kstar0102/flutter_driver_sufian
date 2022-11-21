@@ -10,6 +10,7 @@ enum TripStatus {
   started,
   finished,
   canceled,
+  fake,
 }
 
 // trip status strings.
@@ -20,6 +21,7 @@ const List<String> kTripStatusStrings = [
   'Started',
   'Finished',
   'Canceled',
+  'Fake',
 ];
 
 // trip status colors.
@@ -30,6 +32,7 @@ const List<Color> kTripStatusColors = [
   Color(0xFF29ABE2),
   Color(0xFF39B54A),
   Color(0xFFFF00FF),
+  Color(0xFF838181),
 ];
 
 ///-----------------------------------------------------------------------------
