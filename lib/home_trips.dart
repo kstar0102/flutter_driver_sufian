@@ -43,11 +43,12 @@ class _HomeTripsPageState extends State<HomeTripsPage>
           children: [
             SizedBox(height: 80,),
             Container(
-              height: 130 * SizeConfig.scaleY,
+              height: 110 * SizeConfig.scaleY,
               margin: EdgeInsets.only(
                 left: primaryTabBarHMargin,
                 right: primaryTabBarHMargin,
                 top: 50 * SizeConfig.scaleY,
+                bottom: 10
               ),
               decoration: BoxDecoration(
                 color: const Color(0xFFB3B3B3),
@@ -87,9 +88,9 @@ class _HomeTripsPageState extends State<HomeTripsPage>
             ),
             Container(
                 alignment: Alignment.center,
-                margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height/30),
+                margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height/55),
                 width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height / 13,
+                height: MediaQuery.of(context).size.height / 15,
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(50)),
                   color: Colors.orange,

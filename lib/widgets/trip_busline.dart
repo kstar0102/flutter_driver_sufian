@@ -6,9 +6,14 @@ import 'package:driver_app/widgets/trip_info.dart';
 class TripBusLine extends StatefulWidget {
   final BusLineInfo info;
 
+  final String driver_name;
+  final bool detail;
+
+
   const TripBusLine({
     Key? key,
     required this.info,
+    required this.driver_name, required this.detail,
   }) : super(key: key);
 
   @override
@@ -72,7 +77,7 @@ class _TripBusLineState extends State<TripBusLine> {
     return Container(
       decoration: const BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: kColorPrimaryBlue),
+          bottom: BorderSide(color: Colors.blue),
         ),
       ),
       child: Row(
@@ -88,7 +93,8 @@ class _TripBusLineState extends State<TripBusLine> {
               children: [
                 Image(
                   width: timerW,
-                  image: const AssetImage('assets/images/bus_time.png'),
+                  image: AssetImage('assets/images/bus_time.png'),
+                  color: Colors.orange,
                 ),
                 const SizedBox(width: 2),
                 Text(
@@ -155,6 +161,7 @@ class _TripBusLineState extends State<TripBusLine> {
             ),
           ],
         ),
+
       ],
     );
   }
@@ -177,6 +184,31 @@ class _TripBusLineState extends State<TripBusLine> {
           _buildBusRow(),
           const SizedBox(height: 8),
           _buildCourseRow(),
+          !widget.detail ? Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 8),
+                  Text(
+                    "DRIVER",
+                    style: TextStyle(
+                        color: Colors.orange,
+                        fontSize: 11,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  Text(
+                    widget.driver_name,
+                    style: TextStyle(
+                        fontSize: 10
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ) :
+              Row()
         ],
       ),
     );

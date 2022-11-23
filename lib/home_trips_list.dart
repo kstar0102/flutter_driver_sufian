@@ -153,49 +153,49 @@ class _TripsListViewState extends State<TripsListView> {
       // developer.log("zzzzzzzz" + Commons.getCity(trip['origin_city']).toString());
 
       if (trip['status'] == "1") {
-          list.add(TripCard(
+          list.add(TripCard( past: true,
               info: getInfoModel(TripStatus.pending, trip),
               trip: trip,
               onPressed: () {}
           ));
       } else if (trip['status'] == "2") { //accept
-        list.add(TripCard(
+        list.add(TripCard( past: true,
             trip: trip,
             info: getInfoModel(TripStatus.accepted, trip),
             onPressed: () {}
         ));
       }else if (trip['status'] == "3") { //reject
-        list.add(TripCard(
+        list.add(TripCard( past: true,
             trip: trip,
             info: getInfoModel(TripStatus.rejected, trip),
             onPressed: () {}
         ));
       }else if (trip['status'] == "8") { //cancel
-        list.add(TripCard(
+        list.add(TripCard( past: true,
             trip: trip,
             info: getInfoModel(TripStatus.canceled, trip),
             onPressed: () {}
         ));
       }else if (trip['status'] == "4") {  //start
-        list.add(TripCard(
+        list.add(TripCard( past: true,
             trip: trip,
             info: getInfoModel(TripStatus.started, trip),
             onPressed: () {}
         ));
       }else if (trip['status'] == "6") { //finish
-        list.add(TripCard(
+        list.add(TripCard( past: true,
             trip: trip,
             info: getInfoModel(TripStatus.finished, trip),
             onPressed: () {}
         ));
       } else if (trip['status'] == "9") { //fake
-        list.add(TripCard(
+        list.add(TripCard( past: true,
             trip: trip,
             info: getInfoModel(TripStatus.fake, trip),
             onPressed: () {}
         ));
       }
-      list.add(const SizedBox(height: 20),);
+      list.add(const SizedBox(height: 35),);
     });
     if (trips?.length == 0) {
       return Container(
@@ -221,18 +221,18 @@ class _TripsListViewState extends State<TripsListView> {
 
       if (type == "pending") {
         if (trip['status'] == "1") {
-          list.add(TripCard(
+          list.add(TripCard( past: true,
               trip: trip,
               info: getInfoModel(TripStatus.pending, trip),
               onPressed: () {
-                TripDetail(trip: trip,);
+                TripDetail(trip: trip,avatar_url: "",);
               }
           ));
         }
         list.add(const SizedBox(height: 20),);
       } else if (type == "accept") {
         if (trip['status'] == "2") { //accept
-          list.add(TripCard(
+          list.add(TripCard( past: true,
               trip: trip,
               info: getInfoModel(TripStatus.accepted, trip),
               onPressed: () {}
@@ -241,7 +241,7 @@ class _TripsListViewState extends State<TripsListView> {
         list.add(const SizedBox(height: 20),);
       } else if (type == "reject") {
         if (trip['status'] == "3") { //reject
-          list.add(TripCard(
+          list.add(TripCard( past: true,
               trip: trip,
               info: getInfoModel(TripStatus.rejected, trip),
               onPressed: () {}
@@ -250,7 +250,7 @@ class _TripsListViewState extends State<TripsListView> {
         list.add(const SizedBox(height: 20),);
       } else if (type == "cancel") {
         if (trip['status'] == "8") { //cancel
-          list.add(TripCard(
+          list.add(TripCard( past: true,
               trip: trip,
               info: getInfoModel(TripStatus.canceled, trip),
               onPressed: () {}
@@ -259,7 +259,7 @@ class _TripsListViewState extends State<TripsListView> {
         list.add(const SizedBox(height: 20),);
       } else if (type == "start") {
         if (trip['status'] == "4") {  //start
-          list.add(TripCard(
+          list.add(TripCard( past: true,
               trip: trip,
               info: getInfoModel(TripStatus.started, trip),
               onPressed: () {}
@@ -268,7 +268,7 @@ class _TripsListViewState extends State<TripsListView> {
         list.add(const SizedBox(height: 20),);
       } else if (type == "finish") {
         if (trip['status'] == "6") { //finish
-          list.add(TripCard(
+          list.add(TripCard( past: true,
               trip: trip,
               info: getInfoModel(TripStatus.finished, trip),
               onPressed: () {}
@@ -277,13 +277,13 @@ class _TripsListViewState extends State<TripsListView> {
         list.add(const SizedBox(height: 20),);
       } else if (type == "fake") {
         if (trip['status'] == "9") { //fake
-          list.add(TripCard(
+          list.add(TripCard( past: true,
               trip: trip,
               info: getInfoModel(TripStatus.fake, trip),
               onPressed: () {}
           ));
         }
-        list.add(const SizedBox(height: 20),);
+        list.add(const SizedBox(height: 35),);
       }
     });
     if (trips?.length == 0) {
@@ -305,9 +305,9 @@ class _TripsListViewState extends State<TripsListView> {
   SingleChildScrollView getTab(String type) {
     return SingleChildScrollView(
       child: Column(children: [
-        // TripCard(info: testStarted, onPressed: () {}),
+        // TripCard( past: true,info: testStarted, onPressed: () {}),
         // const SizedBox(height: 20),
-        // TripCard(info: testStarted, onPressed: () {}),
+        // TripCard( past: true,info: testStarted, onPressed: () {}),
         FutureBuilder<List<void>>(
           future: Future.wait(
               [
@@ -477,13 +477,65 @@ class _TripsListViewState extends State<TripsListView> {
       length: tabCount,
       child: Column(
         children: <Widget>[
+          widget.listType == TripsListType.pastTrips ?
+          Row(
+           mainAxisAlignment: MainAxisAlignment.start,
+           children: [
+             SingleChildScrollView(
+               scrollDirection: Axis.horizontal,
+               child: Row(
+                 mainAxisAlignment: MainAxisAlignment.start,
+                 children: [
+                   Container(
+                     margin: EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 3),
+                     height: 61 * SizeConfig.scaleY,
+                     child: Image.asset('assets/images/home_icon2.png'),
+                   ),
+                   ButtonsTabBar(
+                     backgroundColor: kColorPrimaryBlue,
+                     borderColor: kColorPrimaryBlue,
+                     unselectedBackgroundColor: Colors.transparent,
+                     unselectedBorderColor: const Color(0xFFB3B3B3),
+                     borderWidth: 1,
+                     height: 32,
+                     radius: 100,
+                     contentPadding: EdgeInsets.only(right: 0.5),
+                     //height: 62 * SizeConfig.scaleX,
+                     // contentPadding: const EdgeInsets.symmetric(horizontal: 6),
+                     labelStyle: const TextStyle(
+                       fontFamily: 'Montserrat',
+                       fontWeight: FontWeight.w400,
+                       fontSize: 10,
+                       color: Colors.white,
+                     ),
+                     unselectedLabelStyle: const TextStyle(
+                       fontFamily: 'Montserrat',
+                       fontWeight: FontWeight.w400,
+                       fontSize: 10,
+                       color: Color(0xFFB3B3B3),
+                     ),
+                     tabs: tabIDArray
+                         .map((t) => Tab(
+                       child: Container(
+                         alignment: Alignment.center,
+                         width: 150 * SizeConfig.scaleX,
+                         child: Text(_getTabTextFromID(t), style: TextStyle(color: Color(0xFFB3B3B3), ),),
+                       ),
+                     ))
+                         .toList(),
+                   ),
+                 ],
+               ),
+             ),
+           ]
+          ) :
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  margin:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  margin: EdgeInsets.only(left: 15, bottom: 10, top: 10, right: 3),
                   height: 61 * SizeConfig.scaleY,
                   child: Image.asset('assets/images/home_icon2.png'),
                 ),
@@ -492,7 +544,9 @@ class _TripsListViewState extends State<TripsListView> {
                   borderColor: kColorPrimaryBlue,
                   unselectedBackgroundColor: Colors.transparent,
                   unselectedBorderColor: const Color(0xFFB3B3B3),
+                  contentPadding: EdgeInsets.only(right: 3),
                   borderWidth: 1,
+                  height: 32,
                   radius: 100,
                   //height: 62 * SizeConfig.scaleX,
                   // contentPadding: const EdgeInsets.symmetric(horizontal: 6),
@@ -513,23 +567,23 @@ class _TripsListViewState extends State<TripsListView> {
                     child: Container(
                       alignment: Alignment.center,
                       width: 132 * SizeConfig.scaleX,
-                      child: Text(_getTabTextFromID(t)),
+                      child: Text(_getTabTextFromID(t), style: TextStyle(color: Color(0xFFB3B3B3)),),
                     ),
                   ))
                       .toList(),
                 ),
               ],
             ),
-          )
-          ,
+          ),
+          SizedBox(height: 30,),
           Expanded(
             child: TabBarView(
               children: <Widget>[
                 SingleChildScrollView(
                   child: Column(children: [
-                    // TripCard(info: testStarted, onPressed: () {}),
+                    // TripCard( past: true,info: testStarted, onPressed: () {}),
                     // const SizedBox(height: 20),
-                    // TripCard(info: testStarted, onPressed: () {}),
+                    // TripCard( past: true,info: testStarted, onPressed: () {}),
                     FutureBuilder<List<void>>(
                       future: Future.wait(
                           [
@@ -571,9 +625,9 @@ class _TripsListViewState extends State<TripsListView> {
                 if (widget.today)
                 SingleChildScrollView(
                   child: Column(children: [
-                    // TripCard(info: testStarted, onPressed: () {}),
+                    // TripCard( past: true,info: testStarted, onPressed: () {}),
                     // const SizedBox(height: 20),
-                    // TripCard(info: testStarted, onPressed: () {}),
+                    // TripCard( past: true,info: testStarted, onPressed: () {}),
                     FutureBuilder<List<void>>(
                       future: Future.wait(
                           [

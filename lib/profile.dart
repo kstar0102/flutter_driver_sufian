@@ -375,7 +375,7 @@ class _ProfileState extends State<Profile> {
                         alignment: Alignment.center,
                         margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height/30),
                         width: MediaQuery.of(context).size.width * 0.9,
-                        height: MediaQuery.of(context).size.height / 13,
+                        height: MediaQuery.of(context).size.height / 15,
                         decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(50)),
                           color: Colors.orange,

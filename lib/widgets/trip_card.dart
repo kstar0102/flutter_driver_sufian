@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:driver_app/trip_detail.dart';
 import 'package:flutter/material.dart';
 
@@ -6,17 +8,23 @@ import 'package:driver_app/widgets/constants.dart';
 import 'package:driver_app/widgets/trip_busline.dart';
 import 'package:driver_app/widgets/gradient_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
+import '../commons.dart';
+
 
 class TripCard extends StatefulWidget {
   final TripInfo info;
   final dynamic trip;
   final VoidCallback onPressed;
+  final bool past;
 
   const TripCard({
     Key? key,
     required this.info,
     required this.onPressed,
     required this.trip,
+    required this.past,
   }) : super(key: key);
 
   @override
@@ -24,6 +32,42 @@ class TripCard extends StatefulWidget {
 }
 
 class _TripCardState extends State<TripCard> {
+
+  late String avatar = "";
+
+  Future<String> getAvatar() async {
+    String result = "";
+
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json',
+      'Cookie' : Commons.cookie,
+    };
+
+    final response = await http.get(
+        Uri.parse('http://167.86.102.230/Alnabali/public/android/client/avatar/${widget.trip['client_name']}'),
+        // Send authorization headers to the backend.
+        headers: requestHeaders
+    );
+
+    Map<String, dynamic> responseJson = jsonDecode(response.body);
+
+    result = responseJson["result"];
+
+    return result;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getAvatar().then((value) {
+      setState(() {
+        avatar = value;
+      });
+    });
+    super.initState();
+  }
+
   Widget _buildCompanyRow() {
     final screenW = MediaQuery.of(context).size.width;
     final avatarRadius = screenW * 0.0924 * 0.5;
@@ -40,7 +84,8 @@ class _TripCardState extends State<TripCard> {
           child: CircleAvatar(
             radius: avatarRadius,
             backgroundColor: Colors.transparent,
-            backgroundImage: AssetImage(widget.info.company.getCompanyImgPath()),
+            // backgroundImage: AssetImage(widget.info.company.getCompanyImgPath()),
+            backgroundImage: NetworkImage(avatar),
           ),
         ),
         Expanded(
@@ -48,13 +93,14 @@ class _TripCardState extends State<TripCard> {
             padding: const EdgeInsets.only(left: 4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   widget.info.company.companyName,
                   style: const TextStyle(
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w700,
-                    fontSize: 13,
+                    fontSize: 11.5,
                     color: kColorPrimaryGrey,
                   ),
                 ),
@@ -80,7 +126,7 @@ class _TripCardState extends State<TripCard> {
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w500,
                 fontSize: 10,
-                color: Colors.black38,
+                color: Colors.orange,
               ),
             ),
             Text(
@@ -89,7 +135,7 @@ class _TripCardState extends State<TripCard> {
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w700,
                 fontSize: 14,
-                color: Colors.black38,
+                color: Colors.orange,
               ),
             ),
             const Text(
@@ -98,14 +144,14 @@ class _TripCardState extends State<TripCard> {
                 fontFamily: 'Montserrat',
                 fontWeight: FontWeight.w500,
                 fontSize: 10,
-                color: Colors.black38,
+                color: Colors.orange,
               ),
             ),
             Row(
               children: [
                 SizedBox(
                   width: screenW * 0.035,
-                  child: Image.asset('assets/images/passengers.png'),
+                  child: Image.asset('assets/images/passengers.png', color: Colors.orange,),
                 ),
                 const SizedBox(width: 4),
                 Text(
@@ -114,7 +160,7 @@ class _TripCardState extends State<TripCard> {
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w700,
                     fontSize: 14,
-                    color: Colors.black38,
+                    color: Colors.orange,
                   ),
                 ),
               ],
@@ -201,7 +247,7 @@ class _TripCardState extends State<TripCard> {
             ),
           ],
         ),
-        Padding(
+        !widget.past ? Padding(
           padding: const EdgeInsets.only(top: 2),
           child: Text(
             widget.info.getTripNoStr(),
@@ -212,14 +258,14 @@ class _TripCardState extends State<TripCard> {
               color: widget.info.getStatusColor(),
             ),
           ),
-        ),
+        ) : Text(""),
         SizedBox(
           width: screenW * 0.741,
           child: Column(
             children: [
               _buildCompanyRow(),
               const SizedBox(height: 2),
-              TripBusLine(info: widget.info.busLine),
+              TripBusLine(info: widget.info.busLine, driver_name: widget.trip['dirver_name'], detail: false),
               // _buildButtonsRow(),
               SizedBox(height: 30,)
             ],
@@ -258,28 +304,39 @@ class _TripCardState extends State<TripCard> {
       onTap: () {
         Navigator.push(context, MaterialPageRoute(
             builder: (context) {
-                return TripDetail(trip: widget.trip,);
+                return TripDetail(trip: widget.trip,avatar_url: avatar,);
             },
         ));
       },
-      child: Container(
-        width: cardW,
-        //height: cardH,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: Colors.grey.withOpacity(0.5)),
-          borderRadius: const BorderRadius.all(Radius.circular(18)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              spreadRadius: 1,
-              blurRadius: 1,
-              offset: const Offset(0, 2),
+      child: Stack(
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 3, left: 3),
+            width: cardW,
+            //height: cardH,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.grey.withOpacity(0.5)),
+              borderRadius: const BorderRadius.all(Radius.circular(18)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  spreadRadius: 1,
+                  blurRadius: 1,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
-          ],
-        ),
-        child: _buildCardContents(),
-      ),
+            child: _buildCardContents(),
+          ),
+          widget.info.status == TripStatus.pending ? Container(
+            width: 30,
+            height: 30,
+            color: Colors.white,
+            child: Icon(Icons.edit_note, size: 25, color: Colors.orange,),
+          ) : Container(width: 30, height: 30,)
+        ],
+      )
     );
   }
 }

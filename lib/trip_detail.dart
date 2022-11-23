@@ -12,8 +12,9 @@ import 'widgets/ctm_painter.dart';
 class TripDetail extends StatefulWidget {
 
   final dynamic trip;
+  final String avatar_url;
 
-  const TripDetail({Key? key, this.trip}) : super(key: key);
+  const TripDetail({Key? key, this.trip, required this.avatar_url}) : super(key: key);
 
   @override
   State<TripDetail> createState() => _TripDetailState();
@@ -176,6 +177,7 @@ class _TripDetailState extends State<TripDetail> with SingleTickerProviderStateM
 
                               },
                               trip: widget.trip,
+                              avatar_url: widget.avatar_url,
                             ),
                           ],
                         ),

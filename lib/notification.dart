@@ -174,12 +174,12 @@ class _NotificationPageState extends State<NotificationPage> {
               child: Container(
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).size.height/30,
+                    bottom: MediaQuery.of(context).size.height/55,
                     left: MediaQuery.of(context).size.width/20,
                     right: MediaQuery.of(context).size.width/20,
                   ),
                   width: MediaQuery.of(context).size.width * 0.9,
-                  height: MediaQuery.of(context).size.height / 13,
+                  height: MediaQuery.of(context).size.height / 15,
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(50)),
                     color: Colors.orange,
