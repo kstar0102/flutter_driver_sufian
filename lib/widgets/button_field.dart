@@ -1,8 +1,10 @@
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class ButtonField extends StatefulWidget {
-  const ButtonField({Key? key, required this.buttonType, required this.onPressedCallback}) : super(key: key);
+  const ButtonField(
+      {Key? key, required this.buttonType, required this.onPressedCallback})
+      : super(key: key);
 
   final String buttonType;
   final VoidCallback onPressedCallback;
@@ -14,35 +16,34 @@ class ButtonField extends StatefulWidget {
 class _ButtonFieldState extends State<ButtonField> {
   @override
   Widget build(BuildContext context) {
-
     String displayName = "";
 
     switch (widget.buttonType) {
       case "login":
-        displayName = "LOGIN";
+        displayName = "login".tr();
         break;
       case "send":
-        displayName = "SEND";
+        displayName = "send".tr();
         break;
       case "verify":
-        displayName = "VERIFY";
+        displayName = "verify".tr();
         break;
       case "reset":
-        displayName = "RESET";
+        displayName = "reset".tr();
         break;
       default:
         break;
     }
 
     return SizedBox(
-      height: MediaQuery.of(context).size.height/19,
-      width: MediaQuery.of(context).size.width/1.4,
+      height: MediaQuery.of(context).size.height / 19,
+      width: MediaQuery.of(context).size.width / 1.4,
       child: Stack(
         alignment: Alignment.center,
         children: [
           Container(
-            height: MediaQuery.of(context).size.height/19,
-            width: MediaQuery.of(context).size.width/1.4,
+            height: MediaQuery.of(context).size.height / 19,
+            width: MediaQuery.of(context).size.width / 1.4,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: const BorderRadius.all(Radius.circular(50)),

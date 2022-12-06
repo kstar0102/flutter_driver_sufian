@@ -311,7 +311,7 @@ class _TripCardState extends State<TripCard> {
       child: Stack(
         children: [
           Container(
-            margin: EdgeInsets.only(top: 3, left: 3),
+            margin: EdgeInsets.only(top: 20, left: 20),
             width: cardW,
             //height: cardH,
             decoration: BoxDecoration(
@@ -329,12 +329,27 @@ class _TripCardState extends State<TripCard> {
             ),
             child: _buildCardContents(),
           ),
-          widget.info.status == TripStatus.pending ? Container(
-            width: 30,
-            height: 30,
-            color: Colors.white,
-            child: Icon(Icons.edit_note, size: 25, color: Colors.orange,),
-          ) : Container(width: 30, height: 30,)
+          // widget.info.status == TripStatus.pending ? Container(
+          //   width: 30,
+          //   height: 30,
+          //   // color: Colors.white,
+          //   decoration: BoxDecoration(
+          //     border: Border.all(color: Colors.black45)
+          //   ),
+          //   child: Image.asset("assets/pending_icon.png", fit: BoxFit.contain,)
+          // ) : Container(width: 30, height: 30,),
+          if (widget.info.status == TripStatus.pending || widget.info.status == TripStatus.rejected || widget.info.status == TripStatus.fake)
+            Image(
+              image: AssetImage("assets/pending_icon.png"),
+              width: 50,
+              height: 50,
+            )
+          else Container(width: 50, height: 50,)
+          // widget.info.status == TripStatus.pending ? Image(
+          //   image: AssetImage("assets/pending_icon.png"),
+          //   width: 50,
+          //   height: 50,
+          // ) : Container(width: 50, height: 50,),
         ],
       )
     );

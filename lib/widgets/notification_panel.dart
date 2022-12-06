@@ -5,13 +5,15 @@ class NotificationPanel extends StatefulWidget {
   final String tripID;
   final String tripType;
   final String tripName;
+  final String avatar_url;
 
 
   const NotificationPanel({
     Key? key,
     required this.tripID,
     required this.tripName,
-    required this.tripType,
+    required this.tripType, 
+    required this.avatar_url,
   }) : super(key: key);
 
 
@@ -72,23 +74,18 @@ class _NotificationPanelState extends State<NotificationPanel> {
                     height: 30,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(50)),
-                      color: mTripColor[widget.tripType],
+                      border: Border.all(color: Colors.black45)
                     ),
-                    child: Center(
-                      child: Text(
-                        "TRIP",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 11
-                        ),
-                      ),
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(widget.avatar_url),
                     )
                   ),
                   Text(
                     widget.tripID,
                     style: TextStyle(
                       fontSize: 10,
-                      color: mTripColor[widget.tripType],
+                      // color: mTripColor[widget.tripType],
+                      color: Colors.black45,
                       fontWeight: FontWeight.w700
                     ),
                   )
@@ -97,6 +94,7 @@ class _NotificationPanelState extends State<NotificationPanel> {
               SizedBox(width: 20,),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     child: Text(

@@ -1,5 +1,6 @@
 import 'package:driver_app/commons.dart';
 import 'package:driver_app/trip_detail.dart';
+import 'package:driver_app/trip_detail_pending.dart';
 import 'package:flutter/material.dart';
 
 import 'package:driver_app/widgets/trip_info.dart';
@@ -315,19 +316,15 @@ class _TripDetailCardState extends State<TripDetailCard> {
     // );
     return GestureDetector(
       onTap: () {
-        // Navigator.push(context, MaterialPageRoute(
-        //   builder: (context) {
-        //     return TripDetail(trip: widget.trip,);
-        //   },
-        // ));
-        if (widget.info.getStatusStr() == "Pending") {
-          Navigator.pushNamed(context, '/trip_detail_pending');
-        }
+
+        // if (widget.info.getStatusStr() == "Pending") {
+        //   Navigator.pushNamed(context, '/trip_detail_pending');
+        // }
       },
       child: Stack(
         children: [
           Container(
-            margin: EdgeInsets.only(top: 3, left: 3),
+            margin: EdgeInsets.only(top: 20, left: 20),
             width: cardW,
             //height: cardH,
             decoration: BoxDecoration(
@@ -345,12 +342,23 @@ class _TripDetailCardState extends State<TripDetailCard> {
             ),
             child: _buildCardContents(),
           ),
-          widget.info.status == TripStatus.pending ? Container(
-            width: 30,
-            height: 30,
-            color: Colors.white,
-            child: Icon(Icons.edit_note, size: 25, color: Colors.orange,),
-          ) : Container(width: 30, height: 30,)
+          if (widget.info.status == TripStatus.pending || widget.info.status == TripStatus.rejected || widget.info.status == TripStatus.fake)
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return TripDetailPending(trip: widget.trip,);
+                },
+              ));
+            },
+            child: Image(
+              image: AssetImage("assets/pending_icon.png"),
+              width: 50,
+              height: 50,
+            ),
+          )
+          else
+            Container(width: 50, height: 50,),
         ],
       )
     );

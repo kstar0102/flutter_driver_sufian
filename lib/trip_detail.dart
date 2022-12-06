@@ -10,20 +10,20 @@ import 'widgets/constants.dart';
 import 'widgets/ctm_painter.dart';
 
 class TripDetail extends StatefulWidget {
-
   final dynamic trip;
   final String avatar_url;
 
-  const TripDetail({Key? key, this.trip, required this.avatar_url}) : super(key: key);
+  const TripDetail({Key? key, this.trip, required this.avatar_url})
+      : super(key: key);
 
   @override
   State<TripDetail> createState() => _TripDetailState();
 }
 
-class _TripDetailState extends State<TripDetail> with SingleTickerProviderStateMixin {
-
-
+class _TripDetailState extends State<TripDetail>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -49,14 +49,22 @@ class _TripDetailState extends State<TripDetail> with SingleTickerProviderStateM
       busNo: widget.trip['bus_no'],
       passengers: widget.trip['bus_size_id'],
       busLine: BusLineInfo(
-        fromTime: DateTime(Commons.getYear(widget.trip['start_date']), Commons.getMonth(widget.trip['start_date']),
-            Commons.getDay(widget.trip['start_date']), Commons.getHour(widget.trip['start_time']), Commons.getMinute(widget.trip['start_time'])),
-        toTime: DateTime(Commons.getYear(widget.trip['end_date']), Commons.getMonth(widget.trip['end_date']),
-            Commons.getDay(widget.trip['end_date']), Commons.getHour(widget.trip['end_time']), Commons.getMinute(widget.trip['end_time'])),
+        fromTime: DateTime(
+            Commons.getYear(widget.trip['start_date']),
+            Commons.getMonth(widget.trip['start_date']),
+            Commons.getDay(widget.trip['start_date']),
+            Commons.getHour(widget.trip['start_time']),
+            Commons.getMinute(widget.trip['start_time'])),
+        toTime: DateTime(
+            Commons.getYear(widget.trip['end_date']),
+            Commons.getMonth(widget.trip['end_date']),
+            Commons.getDay(widget.trip['end_date']),
+            Commons.getHour(widget.trip['end_time']),
+            Commons.getMinute(widget.trip['end_time'])),
         // courseName: "${widget.trip['origin_area']} - ${widget.trip['destination_area']}",
         // cityName: widget.trip['origin_city'],
-        courseName: "${widget.trip['origin_area']?? 'here'} ",
-        cityName: widget.trip['origin_city']?? "here",
+        courseName: "${widget.trip['origin_area'] ?? 'here'} ",
+        cityName: widget.trip['origin_city'] ?? "here",
         // courseName: "code here",
         // cityName: "code here",
       ),
@@ -65,134 +73,147 @@ class _TripDetailState extends State<TripDetail> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-
     SizeConfig().init(context);
     final primaryTabBarHMargin = 150 * SizeConfig.scaleX;
-
 
     TripStatus tripStatus = TripStatus.pending;
     if (widget.trip['status'] == "1") {
       tripStatus = TripStatus.pending;
-    } else if (widget.trip['status'] == "2") { //accept
+    } else if (widget.trip['status'] == "2") {
+      //accept
       tripStatus = TripStatus.accepted;
-    }else if (widget.trip['status'] == "3") { //reject
+    } else if (widget.trip['status'] == "3") {
+      //reject
       tripStatus = TripStatus.rejected;
-    }else if (widget.trip['status'] == "8") { //cancel
+    } else if (widget.trip['status'] == "5") {
+      //cancel
       tripStatus = TripStatus.canceled;
-    }else if (widget.trip['status'] == "4") {  //start
+    } else if (widget.trip['status'] == "4") {
+      //start
       tripStatus = TripStatus.started;
-    }else if (widget.trip['status'] == "6") { //finish
+    } else if (widget.trip['status'] == "6") {
+      //finish
       tripStatus = TripStatus.finished;
-    }else if (widget.trip['status'] == "9") { //finish
+    } else if (widget.trip['status'] == "7") {
+      //finish
       tripStatus = TripStatus.fake;
     }
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/bg_trip.png"),
-                fit: BoxFit.fill
-            )
-        ),
-        child: Column(
-          children: [
-            // SizedBox(height: MediaQuery.of(context).size.height/10,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    width: 20,
-                    height: 40,
-                    margin: EdgeInsets.only(top: 35, left: 30),
-                    child: CustomPaint(
-                      painter: BackArrowPainter(),
-                    ),
+        body: Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage("assets/bg_trip.png"), fit: BoxFit.fill)),
+      child: Column(
+        children: [
+          // SizedBox(height: MediaQuery.of(context).size.height/10,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  width: 20,
+                  height: 30,
+                  margin: EdgeInsets.only(top: 15, left: 30),
+                  child: CustomPaint(
+                    painter: BackArrowPainter(),
                   ),
                 ),
-                SizedBox(width: MediaQuery.of(context).size.width/5,),
-                Padding(
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 5,
+              ),
+              Padding(
                   padding: EdgeInsets.only(top: 30),
-                  child: Text(
-                    "TRIP #${widget.trip['id']}",
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                        decoration: TextDecoration.none
-                    ),
-                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        "${widget.trip['trip_name']}",
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.none),
+                      ),
+                      Text(
+                        "TRIP #${widget.trip['id']}",
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white,
+                            decoration: TextDecoration.none),
+                      ),
+                    ],
+                  )),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 3,
+              ),
+            ],
+          ),
+
+          Container(
+            height: 130 * SizeConfig.scaleY,
+            margin: EdgeInsets.only(
+              left: primaryTabBarHMargin,
+              right: primaryTabBarHMargin,
+              top: 50 * SizeConfig.scaleY,
+            ),
+            decoration: BoxDecoration(
+              color: kColorPrimaryBlue,
+              borderRadius: BorderRadius.circular(100),
+            ),
+            child: TabBar(
+              controller: _tabController,
+              indicator: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                  color: Colors.deepOrangeAccent),
+              labelColor: Colors.white,
+              unselectedLabelColor: Colors.white,
+              labelStyle: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 40 * SizeConfig.scaleY,
+              ),
+              tabs: const [
+                Tab(
+                  text: "Details",
                 ),
-                SizedBox(width: MediaQuery.of(context).size.width/3,),
+                Tab(
+                  text: "Tracking",
+                )
               ],
             ),
-
-            Container(
-              height: 130 * SizeConfig.scaleY,
-              margin: EdgeInsets.only(
-                left: primaryTabBarHMargin,
-                right: primaryTabBarHMargin,
-                top: 50 * SizeConfig.scaleY,
-              ),
-              decoration: BoxDecoration(
-                color: const Color(0xFFB3B3B3),
-                borderRadius: BorderRadius.circular(100),
-              ),
-              child: TabBar(
-                controller: _tabController,
-                indicator: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(100)),
-                    color: kColorPrimaryBlue
-                ),
-                labelColor: Colors.white,
-                unselectedLabelColor: Colors.white,
-                labelStyle: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 32 * SizeConfig.scaleY,
-                ),
-                tabs: const [
-                  Tab(text: "Details",),
-                  Tab(text: "Tracking",)
-                ],
-              ),
-            ),
-            Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    Container(
-
-                      child: Container(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 100,),
-
-                            TripDetailCard(
-                              info: getInfoModel(tripStatus),
-                              onPressed: () {
-
-                              },
-                              trip: widget.trip,
-                              avatar_url: widget.avatar_url,
-                            ),
-                          ],
-                        ),
+          ),
+          Expanded(
+              child: TabBarView(
+            controller: _tabController,
+            children: [
+              Container(
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 100,
                       ),
-                    ),
-
-                    TripDetailTrack()
-
-                  ],
-                )
-            )
-          ],
-        ),
-      )
-    );
+                      TripDetailCard(
+                        info: getInfoModel(tripStatus),
+                        onPressed: () {},
+                        trip: widget.trip,
+                        avatar_url: widget.avatar_url,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              TripDetailTrack(
+                trip_id: widget.trip["id"].toString(),
+              )
+            ],
+          ))
+        ],
+      ),
+    ));
   }
 }
-

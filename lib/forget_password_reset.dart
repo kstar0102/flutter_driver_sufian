@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'widgets/button_field.dart';
@@ -11,7 +12,6 @@ class ForgetPasswordReset extends StatefulWidget {
 }
 
 class _ForgetPasswordResetState extends State<ForgetPasswordReset> {
-
   final newPassController = new TextEditingController();
   final confirmPassController = new TextEditingController();
 
@@ -26,7 +26,11 @@ class _ForgetPasswordResetState extends State<ForgetPasswordReset> {
         tooltip: 'Back',
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        child: Image.asset("assets/btn_back.png", width: 30, height: 30,),
+        child: Image.asset(
+          "assets/btn_back.png",
+          width: 30,
+          height: 30,
+        ),
         // child: const Icon(Icons.navigate_before),
       ),
       body: SingleChildScrollView(
@@ -34,24 +38,22 @@ class _ForgetPasswordResetState extends State<ForgetPasswordReset> {
             width: double.infinity,
             decoration: const BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage("assets/bg.png"), fit: BoxFit.cover)
-            ),
+                    image: AssetImage("assets/bg.png"), fit: BoxFit.cover)),
             height: MediaQuery.of(context).size.height,
             child: Container(
-              margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/10),
+              margin:
+                  EdgeInsets.only(top: MediaQuery.of(context).size.height / 10),
               child: Column(
                 children: <Widget>[
                   Image.asset(
                     "assets/message_success.png",
-                    width: MediaQuery.of(context).size.width/2.8,
-                    height: MediaQuery.of(context).size.width/2.8,
+                    width: MediaQuery.of(context).size.width / 2.8,
+                    height: MediaQuery.of(context).size.width / 2.8,
                     alignment: Alignment.center,
                   ),
-                  SizedBox(
-                      height: MediaQuery.of(context).size.height/18
-                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height / 18),
                   Text(
-                    "FORGET PASSWORD",
+                    "forget_password".tr(),
                     style: TextStyle(
                       fontSize: 2.7 * MediaQuery.of(context).size.height * 0.01,
                       color: Colors.white,
@@ -59,40 +61,28 @@ class _ForgetPasswordResetState extends State<ForgetPasswordReset> {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  SizedBox(
-                      height: MediaQuery.of(context).size.height/28
-                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height / 28),
                   RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
                         style: TextStyle(
-                            fontSize: 1.8 * MediaQuery.of(context).size.height * 0.01,
-                            color: Colors.white
-                        ),
-                        text: "Enter your new password below"
-                    ),
+                            fontSize:
+                                1.8 * MediaQuery.of(context).size.height * 0.01,
+                            color: Colors.white),
+                        text: "enter_your_new_password_below".tr()),
                   ),
-                  SizedBox(
-                      height: MediaQuery.of(context).size.height/8
-                  ),
-                  InputField(inputType: "new_password", controller: newPassController),
-                  SizedBox(
-                      height: MediaQuery.of(context).size.height/25
-                  ),
-                  InputField(inputType: "confirm_password", controller: confirmPassController),
-                  SizedBox(
-                      height: MediaQuery.of(context).size.height/18
-                  ),
-                  ButtonField(
-                      buttonType: "reset",
-                      onPressedCallback: () {
-                      }
-                  ),
-
+                  SizedBox(height: MediaQuery.of(context).size.height / 8),
+                  InputField(
+                      inputType: "new_password", controller: newPassController),
+                  SizedBox(height: MediaQuery.of(context).size.height / 25),
+                  InputField(
+                      inputType: "confirm_password",
+                      controller: confirmPassController),
+                  SizedBox(height: MediaQuery.of(context).size.height / 18),
+                  ButtonField(buttonType: "reset", onPressedCallback: () {}),
                 ],
               ),
-            )
-        ),
+            )),
       ),
     );
   }

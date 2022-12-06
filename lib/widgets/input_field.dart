@@ -1,12 +1,13 @@
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class InputField extends StatefulWidget {
-
   final String inputType;
   final TextEditingController controller;
 
-  const InputField({Key? key, required this.inputType, required this.controller}) : super(key: key);
+  const InputField(
+      {Key? key, required this.inputType, required this.controller})
+      : super(key: key);
 
   @override
   State<InputField> createState() => _InputFieldState();
@@ -22,33 +23,33 @@ class _InputFieldState extends State<InputField> {
     switch (widget.inputType) {
       case "username":
         textInputType = TextInputType.text;
-        displayName = "USERNAME";
+        displayName = "username".tr();
         break;
       case "password":
         textInputType = TextInputType.text;
-        displayName = "PASSWORD";
+        displayName = "password".tr();
         isObscure = true;
         break;
       case "new_password":
         textInputType = TextInputType.text;
-        displayName = "NEW PASSWORD";
+        displayName = "new_password".tr();
         isObscure = true;
         break;
       case "confirm_password":
         textInputType = TextInputType.text;
-        displayName = "CONFIRM PASSWORD";
+        displayName = "confirm_password".tr();
         isObscure = true;
         break;
       case "mobile":
         textInputType = TextInputType.number;
-        displayName = "MOBILE NUMBER";
+        displayName = "mobile_number".tr();
         break;
-      default :
+      default:
         break;
     }
     return SizedBox(
-      height: MediaQuery.of(context).size.height/19,
-      width: MediaQuery.of(context).size.width/1.4,
+      height: MediaQuery.of(context).size.height / 19,
+      width: MediaQuery.of(context).size.width / 1.4,
       child: TextField(
         keyboardType: textInputType,
         obscureText: isObscure,
@@ -57,9 +58,7 @@ class _InputFieldState extends State<InputField> {
         decoration: InputDecoration(
           label: Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),
-            child: Text(
-              displayName
-            ),
+            child: Text(displayName),
           ),
           labelStyle: const TextStyle(
             fontSize: 16,
@@ -75,9 +74,8 @@ class _InputFieldState extends State<InputField> {
             borderRadius: BorderRadius.all(Radius.circular(50)),
           ),
           focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(50)),
-            borderSide: BorderSide(color: Colors.white, width: 1.5)
-          ),
+              borderRadius: BorderRadius.all(Radius.circular(50)),
+              borderSide: BorderSide(color: Colors.white, width: 1.5)),
         ),
         style: const TextStyle(
           fontSize: 24,

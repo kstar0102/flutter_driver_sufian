@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:driver_app/widgets/constants.dart';
@@ -34,31 +35,30 @@ class _HomeTripsPageState extends State<HomeTripsPage>
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/bg_notification.png"),
-            fit: BoxFit.fill
-          )
-        ),
+            image: DecorationImage(
+                image: AssetImage("assets/bg_notification.png"),
+                fit: BoxFit.fill)),
         child: Column(
           children: [
-            SizedBox(height: 80,),
+            SizedBox(
+              height: 80,
+            ),
             Container(
               height: 110 * SizeConfig.scaleY,
               margin: EdgeInsets.only(
-                left: primaryTabBarHMargin,
-                right: primaryTabBarHMargin,
-                top: 50 * SizeConfig.scaleY,
-                bottom: 10
-              ),
+                  left: primaryTabBarHMargin,
+                  right: primaryTabBarHMargin,
+                  top: 50 * SizeConfig.scaleY,
+                  bottom: 10),
               decoration: BoxDecoration(
-                color: const Color(0xFFB3B3B3),
+                color: kColorPrimaryBlue,
                 borderRadius: BorderRadius.circular(100),
               ),
               child: TabBar(
                 controller: _tabController,
                 indicator: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(100)),
-                  color: kColorPrimaryBlue,
+                  color: Colors.deepOrangeAccent,
                 ),
                 labelColor: Colors.white,
                 unselectedLabelColor: Colors.white,
@@ -67,9 +67,9 @@ class _HomeTripsPageState extends State<HomeTripsPage>
                   fontWeight: FontWeight.w700,
                   fontSize: 32 * SizeConfig.scaleY,
                 ),
-                tabs: const [
-                  Tab(text: 'TODAY TRIPS'),
-                  Tab(text: 'PAST TRIPS'),
+                tabs: [
+                  Tab(text: 'today_trips'.tr()),
+                  Tab(text: 'past_trips'.tr()),
                 ],
               ),
             ),
@@ -79,16 +79,19 @@ class _HomeTripsPageState extends State<HomeTripsPage>
                 controller: _tabController,
                 children: const [
                   // TODAY TRIPS view
-                  TripsListView(listType: TripsListType.todayTrips, today: true),
+                  TripsListView(
+                      listType: TripsListType.todayTrips, today: true),
 
                   // PAST TRIPS view
-                  TripsListView(listType: TripsListType.pastTrips, today: false),
+                  TripsListView(
+                      listType: TripsListType.pastTrips, today: false),
                 ],
               ),
             ),
             Container(
                 alignment: Alignment.center,
-                margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height/55),
+                margin: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).size.height / 55),
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: MediaQuery.of(context).size.height / 15,
                 decoration: const BoxDecoration(
@@ -103,37 +106,42 @@ class _HomeTripsPageState extends State<HomeTripsPage>
                       },
                       child: Container(
                           child: Padding(
-                            padding: EdgeInsetsDirectional.only(start: MediaQuery.of(context).size.width * 0.08, top: 20, bottom: 15),
-                            child: Image.asset("assets/navbar_track2.png"),
-                          )
-                      ),
+                        padding: EdgeInsetsDirectional.only(
+                            start: MediaQuery.of(context).size.width * 0.08,
+                            top: 20,
+                            bottom: 15),
+                        child: Image.asset("assets/navbar_track2.png"),
+                      )),
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.3,
                       height: MediaQuery.of(context).size.height / 20,
-                      margin: EdgeInsets.only(left: 20, top: 10, bottom: 10,),
+                      margin: EdgeInsets.only(
+                        left: 20,
+                        top: 10,
+                        bottom: 10,
+                      ),
                       child: TextField(
-                        style: const TextStyle(
-                            fontSize: 13
-                        ),
+                        style: const TextStyle(fontSize: 13),
                         decoration: InputDecoration(
                             enabled: false,
                             prefixIcon: Padding(
-                              padding: EdgeInsetsDirectional.only(start: 10,top: 10, bottom: 10),
+                              padding: EdgeInsetsDirectional.only(
+                                  start: 10, top: 10, bottom: 10),
                               // padding: EdgeInsetsDirectional.symmetric(vertical: 10, horizontal: 10),
-                              child: Image.asset("assets/navbar_trip.png", color: Colors.red,),
+                              child: Image.asset(
+                                "assets/navbar_trip.png",
+                                color: Colors.red,
+                              ),
                             ),
                             filled: true,
                             fillColor: Colors.white,
                             contentPadding: EdgeInsets.all(1),
-                            hintText: "TRIPS",
-                            hintStyle: const TextStyle(
-                                color: Colors.red
-                            ),
+                            hintText: 'trips'.tr(),
+                            hintStyle: const TextStyle(color: Colors.red),
                             border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(50))
-                            )
-                        ),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50)))),
                       ),
                     ),
                     GestureDetector(
@@ -142,10 +150,12 @@ class _HomeTripsPageState extends State<HomeTripsPage>
                       },
                       child: Container(
                           child: Padding(
-                            padding: EdgeInsetsDirectional.only(start: MediaQuery.of(context).size.width * 0.08, top: 20, bottom: 15),
-                            child: Image.asset("assets/navbar_notification.png"),
-                          )
-                      ),
+                        padding: EdgeInsetsDirectional.only(
+                            start: MediaQuery.of(context).size.width * 0.08,
+                            top: 20,
+                            bottom: 15),
+                        child: Image.asset("assets/navbar_notification.png"),
+                      )),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -153,14 +163,15 @@ class _HomeTripsPageState extends State<HomeTripsPage>
                       },
                       child: Container(
                           child: Padding(
-                            padding: EdgeInsetsDirectional.only(start: MediaQuery.of(context).size.width * 0.1, top: 20, bottom: 15),
-                            child: Image.asset("assets/navbar_user.png"),
-                          )
-                      ),
+                        padding: EdgeInsetsDirectional.only(
+                            start: MediaQuery.of(context).size.width * 0.1,
+                            top: 20,
+                            bottom: 15),
+                        child: Image.asset("assets/navbar_user.png"),
+                      )),
                     ),
                   ],
-                )
-            ),
+                )),
           ],
         ),
       ),

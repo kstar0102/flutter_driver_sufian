@@ -14,7 +14,6 @@ import 'package:geocoding/geocoding.dart';
 import 'widgets/ctm_painter.dart';
 
 class TripTrack extends StatefulWidget {
-
   const TripTrack({Key? key}) : super(key: key);
 
   @override
@@ -22,7 +21,6 @@ class TripTrack extends StatefulWidget {
 }
 
 class _TripTrackState extends State<TripTrack> {
-
   final Completer<GoogleMapController> _controller = Completer();
   static const LatLng sourceLocation = LatLng(37.335, -122.032);
   static const LatLng destLocation = LatLng(37.335, -122.070);
@@ -44,7 +42,7 @@ class _TripTrackState extends State<TripTrack> {
   final Set<Polyline> _polyline = {};
 
   late Timer timer;
-  Map<String, dynamic>? tripInfo = null;
+  Map<String, dynamic>? tripInfo;
 
   late String trip_name;
   late String origin_city;
@@ -59,20 +57,19 @@ class _TripTrackState extends State<TripTrack> {
   late String? finalLongitude;
 
   Future<void> getCurrentLocations() async {
-
     List<dynamic>? list = null;
 
     Map<String, String> requestHeaders = {
       'Content-type': 'application/x-www-form-urlencoded',
       'Accept': 'application/json',
-      'Cookie' : Commons.cookie,
+      'Cookie': Commons.cookie,
     };
 
     final response = await http.get(
-        Uri.parse('http://167.86.102.230/Alnabali/public/android/driver-location'),
+        Uri.parse(
+            'http://167.86.102.230/Alnabali/public/android/driver-location'),
         // Send authorization headers to the backend.
-        headers: requestHeaders
-    );
+        headers: requestHeaders);
 
     Map<String, dynamic> responseJson = jsonDecode(response.body);
     list = responseJson["result"];
@@ -86,9 +83,7 @@ class _TripTrackState extends State<TripTrack> {
       Marker(
           markerId: MarkerId("source"),
           position: sourceLocation,
-          icon: BitmapDescriptor.defaultMarker
-
-      ),
+          icon: BitmapDescriptor.defaultMarker),
     );
     markers.add(
       Marker(
@@ -105,15 +100,15 @@ class _TripTrackState extends State<TripTrack> {
       developer.log("map335 " + element['longitude']);
       Marker marker = Marker(
           markerId: MarkerId("marker${element['trip_id']}"),
-          position: LatLng(double.parse(element['latitude']), double.parse(element['longitude'])),
+          position: LatLng(double.parse(element['latitude']),
+              double.parse(element['longitude'])),
           icon: currentIcon,
           onTap: () {
             developer.log("markertap");
             getDialog();
 
             // getTrip(element['trip_id']);
-          }
-      );
+          });
       // setState(() {
       markers.add(marker);
       // });
@@ -135,7 +130,7 @@ class _TripTrackState extends State<TripTrack> {
       developer.log("locationHello333");
       return false;
     }
-   }
+  }
 
   Future<void> getDialog() {
     return showGeneralDialog(
@@ -151,13 +146,12 @@ class _TripTrackState extends State<TripTrack> {
             height: 300,
             child: SizedBox.expand(
                 child: TripDialogDetail(
-                  trip_name: trip_name,
-                  origin_city: origin_city,
-                  origin_area: origin_area,
-                  dest_city: dest_city,
-                  dest_area: dest_area,
-                )
-            ),
+              trip_name: trip_name,
+              origin_city: origin_city,
+              origin_area: origin_area,
+              dest_city: dest_city,
+              dest_area: dest_area,
+            )),
             margin: EdgeInsets.only(bottom: 0, left: 0, right: 0),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -168,26 +162,26 @@ class _TripTrackState extends State<TripTrack> {
       },
       transitionBuilder: (context, anim1, anim2, child) {
         return SlideTransition(
-          position: Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim1),
+          position:
+              Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim1),
           child: child,
         );
       },
     );
   }
 
-
   void getTrip(String trip_id) async {
     Map<String, String> requestHeaders = {
       'Content-type': 'application/x-www-form-urlencoded',
       'Accept': 'application/json',
-      'Cookie' : Commons.cookie,
+      'Cookie': Commons.cookie,
     };
 
     final response = await http.get(
-        Uri.parse('http://167.86.102.230/Alnabali/public/android/daily-trip/${trip_id}'),
+        Uri.parse(
+            'http://167.86.102.230/Alnabali/public/android/daily-trip/${trip_id}'),
         // Send authorization headers to the backend.
-        headers: requestHeaders
-    );
+        headers: requestHeaders);
 
     Map<String, dynamic> responseJson = jsonDecode(response.body);
 
@@ -200,19 +194,18 @@ class _TripTrackState extends State<TripTrack> {
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         Commons.APIKEY,
         PointLatLng(sourceLocation.latitude, sourceLocation.longitude),
-        PointLatLng(destLocation.latitude, destLocation.longitude)
-    );
+        PointLatLng(destLocation.latitude, destLocation.longitude));
 
     if (result.points.isNotEmpty) {
       result.points.forEach((PointLatLng point) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
-
     }
   }
 
   void setCustomMarkerIcon() {
-    BitmapDescriptor.fromAssetImage(ImageConfiguration.empty, "assets/images/bus_from.png")
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/images/bus_from.png")
         .then((icon) => currentIcon = icon);
   }
 
@@ -233,10 +226,8 @@ class _TripTrackState extends State<TripTrack> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     final dynamic args = ModalRoute.of(context)!.settings.arguments;
     trip_name = args[0];
     origin_city = args[1];
@@ -249,175 +240,159 @@ class _TripTrackState extends State<TripTrack> {
 
     latLen.add(LatLng(double.parse(latitude), double.parse(longitude)));
     getCoordinates(dest_city + dest_area).then((value) {
-      latLen.add(LatLng(double.parse(finalLatitude!), double.parse(finalLongitude!)));
-      for(int i=0; i<latLen.length; i++){
+      latLen.add(
+          LatLng(double.parse(finalLatitude!), double.parse(finalLongitude!)));
+      for (int i = 0; i < latLen.length; i++) {
         _markers.add(
-          // added markers
+            // added markers
             Marker(
-              markerId: MarkerId(i.toString()),
-              position: latLen[i],
-              icon: currentIcon,
-            )
-        );
-        setState(() {
-
-        });
-        _polyline.add(
-            Polyline(
-              polylineId: PolylineId('1'),
-              points: latLen,
-              color: Colors.green,
-            )
-        );
+          markerId: MarkerId(i.toString()),
+          position: latLen[i],
+          icon: currentIcon,
+        ));
+        setState(() {});
+        _polyline.add(Polyline(
+          polylineId: PolylineId('1'),
+          points: latLen,
+          color: Colors.green,
+        ));
       }
     });
 
-
-
     return Scaffold(
         body: Column(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height/10,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.orange
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        width: 20,
-                        height: 35,
-                        margin: EdgeInsets.only(top: 30, left: 30),
-                        child: CustomPaint(
-                          painter: BackArrowPainter(),
-                        ),
+      children: [
+        SizedBox(
+            height: MediaQuery.of(context).size.height / 10,
+            child: Container(
+              decoration: BoxDecoration(color: Colors.orange),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      width: 20,
+                      height: 35,
+                      margin: EdgeInsets.only(top: 30, left: 30),
+                      child: CustomPaint(
+                        painter: BackArrowPainter(),
                       ),
                     ),
-                    Text(
-                      // "TRIP #12345",
-                      trip_name,
-                      style: TextStyle(
+                  ),
+                  Text(
+                    // "TRIP #12345",
+                    trip_name,
+                    style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.w900,
-                        height: 4
-                      ),
-                    ),
-                    SizedBox(width: MediaQuery.of(context).size.width/10,)
-                  ],
-                ),
-              )
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.8,
-              child: FutureBuilder(
-                future: getCurrentLocations(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    Center(child: Text("No Driver is running..."));
-                  }
-                  return GoogleMap(
-                    mapType: MapType.terrain,
-                    initialCameraPosition: CameraPosition(
-                        target: LatLng(double.parse(latitude), double.parse(longitude)),
-                        zoom: 13
-                    ),
-                    polylines: _polyline,
-                    markers: _markers,
-                    onMapCreated: (GoogleMapController controller) {
-                      _controller.complete(controller);
-                    },
-                  );
-                },
+                        height: 4),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 10,
+                  )
+                ],
               ),
-            ),
-            SizedBox(
-                height: MediaQuery.of(context).size.height/10,
-                child: GestureDetector(
-                  onTap: () {
-                    getDialog();
-                  },
-                  child: Container(
-                    height: 300,
-                    child: SizedBox.expand(
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                          child: Column(
+            )),
+        Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * 0.8,
+          child: FutureBuilder(
+            future: getCurrentLocations(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                Center(child: Text("No Driver is running..."));
+              }
+              return GoogleMap(
+                mapType: MapType.terrain,
+                initialCameraPosition: CameraPosition(
+                    target:
+                        LatLng(double.parse(latitude), double.parse(longitude)),
+                    zoom: 13),
+                polylines: _polyline,
+                markers: _markers,
+                onMapCreated: (GoogleMapController controller) {
+                  _controller.complete(controller);
+                },
+              );
+            },
+          ),
+        ),
+        SizedBox(
+            height: MediaQuery.of(context).size.height / 10,
+            child: GestureDetector(
+              onTap: () {
+                getDialog();
+              },
+              child: Container(
+                height: 300,
+                child: SizedBox.expand(
+                    child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                    color: Colors.black45, width: 1)),
+                            child: Image.asset(
+                              'assets/images/company_amazon.png',
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Column(
                             mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                        color: Colors.transparent,
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                            color: Colors.black45,
-                                            width: 1
-                                        )
-                                    ),
-                                    child: Image.asset(
-                                      'assets/images/company_amazon.png',
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  SizedBox(width: 5,),
-                                  Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      SelectionArea(
-                                          child: Text(
-                                            'AMAZON',
-                                            style: TextStyle(
-                                                color: Colors.black45,
-                                                fontSize: 13,
-                                                decoration: TextDecoration.none
-                                            ),
-                                          )),
-                                      SelectionArea(
-                                          child: Text(
-                                            // 'Amazon Morning Trip',
-                                            trip_name,
-                                            style: TextStyle(
-                                                color: Colors.greenAccent,
-                                                fontSize: 11,
-                                                decoration: TextDecoration.none
-                                            ),
-                                          )),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                              SelectionArea(
+                                  child: Text(
+                                'AMAZON',
+                                style: TextStyle(
+                                    color: Colors.black45,
+                                    fontSize: 13,
+                                    decoration: TextDecoration.none),
+                              )),
+                              SelectionArea(
+                                  child: Text(
+                                // 'Amazon Morning Trip',
+                                trip_name,
+                                style: TextStyle(
+                                    color: Colors.greenAccent,
+                                    fontSize: 11,
+                                    decoration: TextDecoration.none),
+                              )),
                             ],
                           ),
-                        )
-                    ),
-                    margin: EdgeInsets.only(bottom: 0, left: 0, right: 0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                        ],
+                      ),
+                    ],
                   ),
-                )
-            ),
-          ],
-        )
-    );
+                )),
+                margin: EdgeInsets.only(bottom: 0, left: 0, right: 0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            )),
+      ],
+    ));
   }
-
-
 }

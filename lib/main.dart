@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:driver_app/forget_password.dart';
@@ -15,12 +14,30 @@ import 'package:driver_app/trip.dart';
 import 'package:driver_app/trip_detail.dart';
 import 'package:driver_app/trip_detail_pending.dart';
 import 'package:driver_app/trip_track.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+
+import 'package:easy_localization/easy_localization.dart';
 
 import 'home_trips.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> _firebackgroundMessageHandler(RemoteMessage message) async {
+  print("Handling a background message ${message.messageId}");
+  print("Handling a background message body ${message.toString()}");
+}
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  await Firebase.initializeApp();
+  await FirebaseMessaging.instance.getInitialMessage();
+  FirebaseMessaging.onBackgroundMessage(_firebackgroundMessageHandler);
+
+  runApp(EasyLocalization(
+      path: 'assets/locales',
+      supportedLocales: [Locale('en', 'UK'), Locale('ar', 'JO')],
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -30,7 +47,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      locale: context.locale,
       title: 'Flutter Demo',
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -45,7 +66,7 @@ class MyApp extends StatelessWidget {
         '/password_change': (context) => const ChangePassword(),
         '/notification': (context) => const NotificationPage(),
         '/trip': (context) => const HomeTripsPage(),
-        '/trip_track' : (context) => const TripTrack(),
+        '/trip_track': (context) => const TripTrack(),
         '/trip_detail_pending': (context) => const TripDetailPending(),
       },
     );
@@ -65,23 +86,18 @@ class SplashScreenState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 2),
-            ()=>Navigator.pushReplacement(context,
-            MaterialPageRoute(builder:
-                (context) => MyLogin()
-            )
-        )
-    );
+    Timer(
+        const Duration(seconds: 2),
+        () => Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => MyLogin())));
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
           image: DecorationImage(
-              image: AssetImage("assets/splash.jpg"), fit: BoxFit.cover)
-      ),
+              image: AssetImage("assets/splash.jpg"), fit: BoxFit.cover)),
     );
   }
 }
-
-

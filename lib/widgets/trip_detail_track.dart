@@ -1,11 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:driver_app/widgets/constants.dart';
 import 'package:driver_app/home_trips_list.dart';
 import 'package:flutter_dash/flutter_dash.dart';
+import 'package:http/http.dart' as http;
+
+
+import '../commons.dart';
 
 class TripDetailTrack extends StatefulWidget {
-  const TripDetailTrack({Key? key}) : super(key: key);
+
+  final String trip_id;
+  const TripDetailTrack({Key? key, required this.trip_id}) : super(key: key);
 
   @override
   State<TripDetailTrack> createState() => _TripDetailTrackState();
@@ -14,8 +22,45 @@ class TripDetailTrack extends StatefulWidget {
 class _TripDetailTrackState extends State<TripDetailTrack>
     with SingleTickerProviderStateMixin {
 
+  String newStatus = "Pending", oldStatus = "Pending";
+
+  List<dynamic> transaction = [];
+  List<String> status = [
+    "",
+    "Pending",
+    "Accept",
+    "Reject",
+    "Start",
+    "Cancel",
+    "Finish",
+    "Fake"
+  ];
+  Future<List<dynamic>> getTransaction() async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json',
+      'Cookie' : Commons.cookie,
+    };
+
+    final response = await http.get(
+        Uri.parse('http://167.86.102.230/Alnabali/public/android/transaction/${widget.trip_id}'),
+        headers: requestHeaders
+    );
+
+    Map<String, dynamic> responseJson = jsonDecode(response.body);
+
+    transaction = responseJson["result"];
+    return transaction;
+  }
+
   @override
   void initState() {
+    getTransaction().then((value){
+      setState(() {
+        newStatus = status[int.parse(value.last['new_status'].toString())];
+        oldStatus = status[int.parse(value.last['old_status'].toString())];
+      });
+    });
     super.initState();
   }
 
@@ -79,7 +124,7 @@ class _TripDetailTrackState extends State<TripDetailTrack>
                         child: Icon(
                           Icons.check,
                           color: Colors.white,
-                          size: 15,
+                          size: 10,
                         ),
                       ),
                     ),
@@ -116,7 +161,7 @@ class _TripDetailTrackState extends State<TripDetailTrack>
                         child: Icon(
                           Icons.check,
                           color: Colors.white,
-                          size: 15,
+                          size: 10,
                         ),
                       ),
                     )
@@ -133,7 +178,8 @@ class _TripDetailTrackState extends State<TripDetailTrack>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Pending",
+                              // "Pending",
+                              oldStatus,
                               style: TextStyle(
                                 color: Colors.blue,
                                 fontSize: 13,
@@ -141,7 +187,7 @@ class _TripDetailTrackState extends State<TripDetailTrack>
                               ),
                             ),
                             Text(
-                              "Trip has been cancelled",
+                              "Trip has been " + oldStatus,
                               style: TextStyle(
                                 color: Colors.black45,
                                 fontSize: 10
@@ -151,7 +197,7 @@ class _TripDetailTrackState extends State<TripDetailTrack>
                         ),
                         SizedBox(width: MediaQuery.of(context).size.width/4,),
                         Text(
-                          "02:23 AM",
+                          "12:23 AM",
                           style: TextStyle(
                             color: Colors.blue,
                             fontSize: 8,
@@ -168,7 +214,8 @@ class _TripDetailTrackState extends State<TripDetailTrack>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Pending",
+                              // "Pending",
+                              newStatus,
                               style: TextStyle(
                                 color: Colors.blue,
                                 fontSize: 13,
@@ -176,7 +223,7 @@ class _TripDetailTrackState extends State<TripDetailTrack>
                               ),
                             ),
                             Text(
-                              "Trip has been cancelled",
+                              "Trip has been " + newStatus,
                               style: TextStyle(
                                   color: Colors.black45,
                                   fontSize: 10
@@ -186,7 +233,7 @@ class _TripDetailTrackState extends State<TripDetailTrack>
                         ),
                         SizedBox(width: MediaQuery.of(context).size.width/4,),
                         Text(
-                          "02:23 AM",
+                          "12:30 AM",
                           style: TextStyle(
                               color: Colors.blue,
                               fontSize: 8,

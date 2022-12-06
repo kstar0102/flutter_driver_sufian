@@ -21,13 +21,16 @@ class Assets {
   static const String assetsMessageSuccess = 'assets/message_success.png';
   static const String assetsMeter = 'assets/meter.png';
   static const String assetsNavbarAccount = 'assets/navbar_account.png';
-  static const String assetsNavbarNotification = 'assets/navbar_notification.png';
-  static const String assetsNavbarNotification2 = 'assets/navbar_notification2.png';
+  static const String assetsNavbarNotification =
+      'assets/navbar_notification.png';
+  static const String assetsNavbarNotification2 =
+      'assets/navbar_notification2.png';
   static const String assetsNavbarTrack = 'assets/navbar_track.png';
   static const String assetsNavbarTrack2 = 'assets/navbar_track2.png';
   static const String assetsNavbarTrip = 'assets/navbar_trip.png';
   static const String assetsNavbarUser = 'assets/navbar_user.png';
   static const String assetsPassword = 'assets/password.png';
+  static const String assetsPendingIcon = 'assets/pending_icon.png';
   static const String assetsRoute = 'assets/route.png';
   static const String assetsSplash = 'assets/splash.jpg';
   static const String assetsTime = 'assets/time.png';
@@ -40,7 +43,8 @@ class Assets {
   static const String imagesBusTime = 'assets/images/bus_time.png';
   static const String imagesBusTo = 'assets/images/bus_to.png';
   static const String imagesCompanyAmazon = 'assets/images/company_amazon.png';
-  static const String imagesCompanyMcdonalds = 'assets/images/company_mcdonald\'s.png';
+  static const String imagesCompanyMcdonalds =
+      'assets/images/company_mcdonald\'s.png';
   static const String imagesForgetIcon = 'assets/images/forget_icon.png';
   static const String imagesForgetIcon3 = 'assets/images/forget_icon3.png';
   static const String imagesHomeIcon = 'assets/images/home_icon.png';
@@ -54,5 +58,6 @@ class Assets {
   static const String imagesTripStatus4 = 'assets/images/trip_status4.png';
   static const String imagesTripStatus5 = 'assets/images/trip_status5.png';
   static const String imagesTripStatus6 = 'assets/images/trip_status6.png';
-
+  static const String localesArJO = 'assets/locales/ar-JO.json';
+  static const String localesEnUK = 'assets/locales/en-UK.json';
 }

@@ -85,6 +85,7 @@ class _TripsListViewState extends State<TripsListView> {
     // setToken();
     Map data = {
       'driver_name': "all",
+      'supervisor': Commons.login_id,
     };
     Map<String, String> requestHeaders = {
       'Content-type': 'application/x-www-form-urlencoded',
@@ -170,7 +171,7 @@ class _TripsListViewState extends State<TripsListView> {
             info: getInfoModel(TripStatus.rejected, trip),
             onPressed: () {}
         ));
-      }else if (trip['status'] == "8") { //cancel
+      }else if (trip['status'] == "5") { //cancel
         list.add(TripCard( past: true,
             trip: trip,
             info: getInfoModel(TripStatus.canceled, trip),
@@ -188,7 +189,7 @@ class _TripsListViewState extends State<TripsListView> {
             info: getInfoModel(TripStatus.finished, trip),
             onPressed: () {}
         ));
-      } else if (trip['status'] == "9") { //fake
+      } else if (trip['status'] == "7") { //fake
         list.add(TripCard( past: true,
             trip: trip,
             info: getInfoModel(TripStatus.fake, trip),
@@ -249,7 +250,7 @@ class _TripsListViewState extends State<TripsListView> {
         }
         list.add(const SizedBox(height: 20),);
       } else if (type == "cancel") {
-        if (trip['status'] == "8") { //cancel
+        if (trip['status'] == "5") { //cancel
           list.add(TripCard( past: true,
               trip: trip,
               info: getInfoModel(TripStatus.canceled, trip),
@@ -276,7 +277,7 @@ class _TripsListViewState extends State<TripsListView> {
         }
         list.add(const SizedBox(height: 20),);
       } else if (type == "fake") {
-        if (trip['status'] == "9") { //fake
+        if (trip['status'] == "7") { //fake
           list.add(TripCard( past: true,
               trip: trip,
               info: getInfoModel(TripStatus.fake, trip),
@@ -660,7 +661,6 @@ class _TripsListViewState extends State<TripsListView> {
                           return displaySubTrips("pending");
                         }
                       },
-
                     )
                   ]),
                 ),
